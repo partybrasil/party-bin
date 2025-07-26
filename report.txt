@@ -1,0 +1,42 @@
+# Reporte de Desarrollo PartyBin
+
+## Estado actual
+
+- Estructura de carpetas y archivos creada según README.md
+  - templates/, static/, static/themes/, static/js/, data/pastes/
+  - requirements.txt, .gitignore, render.yaml, Procfile
+  - Plantillas base: base.html, create.html, view.html, edit.html, dashboard.html
+  - CSS y JS utilitario, dashboard.json
+- Arranque básico de Flask funcionando y probado
+- Archivo models.py creado con clase Paste y métodos para persistencia en JSON
+
+## Completado
+- Estructura modular y carpetas
+- Plantillas y archivos estáticos base
+- Arranque y rutas principales en Flask
+- Modelo Paste con persistencia local
+
+## En desarrollo
+- Integración del modelo Paste en las rutas Flask
+- Utilidades para validaciones, contraseñas, autodestrucción, tags, exportación, QR, etc.
+- Lógica de creación, edición, visualización y dashboard
+- Renderizado de Markdown, código y HTML seguro
+
+## Pendiente
+- Protección con contraseña (visualización y edición)
+- Autodestrucción por tiempo, vistas y primer acceso
+- Contador de palabras y caracteres en frontend
+- Selector de temas visuales dinámico
+- Exportación de pastes (.txt, .md, .html) y vistas raw
+- Generación de QR para compartir
+- Sistema de tags y filtrado en dashboard
+- Dashboard con clave secreta y gestión offline
+- Vista previa automática de imágenes
+- Metadata avanzada y opciones en bloque Markdown
+- Seguridad y validaciones robustas
+- Pruebas unitarias y ejemplos de uso
+
+## Notas
+- Todo el desarrollo sigue estrictamente el README.md y los comentarios de app.py
+- No se han implementado funcionalidades fuera de lo previsto
+- El reporte se irá actualizando conforme se completen módulos y funcionalidades

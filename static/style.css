@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; background: #f8f8f8; color: #222; }
+.container { max-width: 900px; margin: 2em auto; background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+#theme-switcher { text-align: right; margin-bottom: 1em; }
+#theme-switcher button { margin: 0 4px; }
+.paste-content { margin: 2em 0; }
+.metadata span { margin-right: 1em; font-size: 0.95em; color: #666; }
+.actions a { margin-right: 1em; }

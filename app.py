@@ -42,4 +42,44 @@ Gracias, Copilot.
 """
 
 # Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+# --- INICIO DE PARTYBIN ---
+from flask import Flask, render_template, request, redirect, url_for, flash
+import os
+
+# Configuración básica
+app = Flask(__name__)
+app.secret_key = os.environ.get('PARTYBIN_SECRET', 'partybin_default_secret')
+
+# Rutas principales
+@app.route('/')
+def index():
+	return render_template('create.html')
+
+@app.route('/create', methods=['GET', 'POST'])
+def create_paste():
+	if request.method == 'POST':
+		# Aquí irá la lógica para crear el paste
+		flash('Paste creado (demo)', 'success')
+		return redirect(url_for('index'))
+	return render_template('create.html')
+
+@app.route('/view/<string:paste_url>')
+def view_paste(paste_url):
+	# Aquí irá la lógica para cargar y mostrar el paste
+	return render_template('view.html', paste={})
+
+@app.route('/edit/<string:paste_url>', methods=['GET', 'POST'])
+def edit_paste(paste_url):
+	# Aquí irá la lógica para editar el paste
+	return render_template('edit.html', paste={})
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+	# Aquí irá la lógica para mostrar el dashboard
+	return render_template('dashboard.html', pastes=[])
+
+# --- FIN DE PARTYBIN ---
+# Arranque local
+if __name__ == "__main__":
+	app.run(debug=True, host="0.0.0.0", port=5000)
 

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paste | PartyBin{% endblock %}
+{% block content %}
+<h2>Editar Paste</h2>
+<form method="POST">
+    <label>Título: <input type="text" name="title" value="{{ paste.title }}"></label><br>
+    <label>Contenido:<br>
+        <textarea name="content" rows="15" cols="80">{{ paste.content }}</textarea>
+    </label><br>
+    <label>Formato:
+        <select name="format">
+            <option value="markdown" {% if paste.format == 'markdown' %}selected{% endif %}>Markdown</option>
+            <option value="plaintext" {% if paste.format == 'plaintext' %}selected{% endif %}>Texto plano</option>
+            <option value="html" {% if paste.format == 'html' %}selected{% endif %}>HTML</option>
+            <option value="code" {% if paste.format == 'code' %}selected{% endif %}>Código</option>
+        </select>
+    </label><br>
+    <label>Contraseña (si protegida): <input type="password" name="password"></label><br>
+    <label>Firma/Alias: <input type="text" name="author" value="{{ paste.author }}"></label><br>
+    <label>Tags: <input type="text" name="tags" value="{{ paste.tags|join(', ') }}"></label><br>
+    <button type="submit">Guardar Cambios</button>
+</form>
+{% endblock %}

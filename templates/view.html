@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Ver Paste | PartyBin{% endblock %}
+{% block content %}
+<h2>{{ paste.title or 'Paste' }}</h2>
+<div class="metadata">
+    <span>Creado: {{ paste.created_at }}</span>
+    <span>Vistas: {{ paste.views }}</span>
+    <span>Expira: {{ paste.expiration or 'Nunca' }}</span>
+    <span>Tags: {{ paste.tags|join(', ') }}</span>
+    <span>Autor: {{ paste.author or 'Anónimo' }}</span>
+</div>
+<div class="paste-content">
+    {{ paste.rendered_content|safe }}
+</div>
+<div class="actions">
+    <a href="/raw/{{ paste.url }}">Raw</a>
+    <a href="/export/{{ paste.url }}?type=txt">Descargar TXT</a>
+    <a href="/export/{{ paste.url }}?type=md">Descargar MD</a>
+    <a href="/export/{{ paste.url }}?type=html">Descargar HTML</a>
+    <a href="/qr/{{ paste.url }}">QR</a>
+    <a href="/edit/{{ paste.url }}">Editar</a>
+</div>
+{% endblock %}

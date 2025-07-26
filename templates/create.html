@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Crear Paste | PartyBin{% endblock %}
+{% block content %}
+<h2>Crear nuevo Paste</h2>
+<form method="POST" enctype="multipart/form-data">
+    <label>Título (opcional): <input type="text" name="title"></label><br>
+    <label>Contenido:<br>
+        <textarea name="content" rows="15" cols="80"></textarea>
+    </label><br>
+    <label>Formato:
+        <select name="format">
+            <option value="markdown">Markdown</option>
+            <option value="plaintext">Texto plano</option>
+            <option value="html">HTML</option>
+            <option value="code">Código</option>
+        </select>
+    </label><br>
+    <label>URL personalizada (opcional): <input type="text" name="custom_url"></label><br>
+    <label>Contraseña (opcional): <input type="password" name="password"></label><br>
+    <label>Firma/Alias (opcional): <input type="text" name="author"></label><br>
+    <label>Tags (separados por coma): <input type="text" name="tags"></label><br>
+    <label>Autodestrucción:
+        <select name="autodestruct">
+            <option value="none">Ninguna</option>
+            <option value="time">Por tiempo</option>
+            <option value="views">Por vistas</option>
+            <option value="one">Primer acceso</option>
+        </select>
+        <input type="text" name="autodestruct_value" placeholder="Valor (minutos, vistas, etc)">
+    </label><br>
+    <button type="submit">Crear Paste</button>
+</form>
+{% endblock %}

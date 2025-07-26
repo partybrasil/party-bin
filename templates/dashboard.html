@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | PartyBin{% endblock %}
+{% block content %}
+<h2>Dashboard de Pastes</h2>
+<form method="POST" action="/dashboard">
+    <label>Clave secreta: <input type="password" name="secret_key"></label>
+    <button type="submit">Acceder</button>
+</form>
+{% if pastes %}
+<table>
+    <tr><th>Título</th><th>URL</th><th>Vistas</th><th>Expira</th><th>Acciones</th></tr>
+    {% for paste in pastes %}
+    <tr>
+        <td>{{ paste.title }}</td>
+        <td><a href="/view/{{ paste.url }}">{{ paste.url }}</a></td>
+        <td>{{ paste.views }}</td>
+        <td>{{ paste.expiration or 'Nunca' }}</td>
+        <td>
+            <a href="/edit/{{ paste.url }}">Editar</a>
+            <a href="/delete/{{ paste.url }}">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% endblock %}
