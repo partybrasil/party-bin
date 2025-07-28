@@ -286,7 +286,23 @@ def dashboard_delete_paste(paste_url):
     else:
         flash('Paste no encontrado.', 'error')
     return redirect(url_for('dashboard'))
-# ...existing code...
+
+@app.route('/auth/<string:paste_url>', methods=['POST'])
+def auth_paste(paste_url):
+    paste_path = os.path.join('data', 'pastes', f"{paste_url}.json")
+    if not os.path.exists(paste_path):
+        flash('Paste no encontrado', 'error')
+        return redirect(url_for('index'))
+    with open(paste_path, 'r', encoding='utf-8') as f:
+        paste = json.load(f)
+    password = request.form.get('password', '')
+    if paste['password'] and password == paste['password']:
+        session[f'auth_{paste_url}'] = True
+        next_url = request.form.get('next', url_for('view_paste', paste_url=paste_url))
+        return redirect(next_url)
+    else:
+        flash('Contraseña incorrecta', 'error')
+        return render_template('password_prompt.html', paste_url=paste_url, theme=get_theme())
 # Arranque local
 if __name__ == "__main__":
 	app.run(debug=True, host="0.0.0.0", port=5000)
