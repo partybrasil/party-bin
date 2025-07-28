@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Supported Languages · party-bin{% endblock %}
+{% block content %}
+<div class="langs-container">
+    <pre style="background:#181818;color:#b9f871;padding:16px 18px;border-radius:8px;font-size:1.1em;">
+```LANGUAGE_SHORT_NAME_GOES_HERE
+s = "Triple backticks ( ``` ) will generate code block"
+print(s)
+```
+    </pre>
+    <div style="margin:16px 0 8px 0;color:#aaa;font-size:1em;">
+        Si no se define un lenguaje, se intentará adivinar. Si la detección falla, el bloque tendrá resaltado básico.<br>
+        <span style="color:#b9f871;font-weight:bold;">Los lenguajes marcados con el checkbox verde están soportados por party-bin para resaltado de sintaxis.</span>
+    </div>
+    <ul style="list-style:none;padding-left:0;">
+    {% set supported = ['python', 'py', 'bash', 'sh', 'shell', 'javascript', 'js', 'html', 'css', 'json', 'sql', 'markdown', 'md', 'yaml', 'yml', 'ini', 'cfg', 'xml', 'c', 'cpp', 'c++', 'java', 'go', 'php', 'ruby', 'rb', 'swift', 'rs', 'rust', 'ts', 'typescript', 'make', 'makefile', 'bat', 'powershell', 'ps1', 'psm1', 'docker', 'dockerfile'] %}
+    {% for lang in [
+        ['ABAP', 'abap'], ['ActionScript', 'actionscript'], ['Ada', 'ada'], ['Bash', 'bash'], ['Batchfile', 'bat'], ['C', 'c'], ['C++', 'cpp'], ['C#', 'csharp'], ['Clojure', 'clojure'], ['CoffeeScript', 'coffeescript'], ['Crystal', 'crystal'], ['CSS', 'css'], ['Dart', 'dart'], ['Docker', 'dockerfile'], ['Elixir', 'elixir'], ['Elm', 'elm'], ['Erlang', 'erlang'], ['F#', 'fsharp'], ['Go', 'go'], ['Groovy', 'groovy'], ['Haskell', 'haskell'], ['HTML', 'html'], ['INI', 'ini'], ['Java', 'java'], ['JavaScript', 'js'], ['JSON', 'json'], ['Julia', 'julia'], ['Kotlin', 'kotlin'], ['Lua', 'lua'], ['Makefile', 'makefile'], ['Markdown', 'md'], ['Objective-C', 'objective-c'], ['Perl', 'perl'], ['PHP', 'php'], ['PowerShell', 'powershell'], ['Python', 'python'], ['R', 'r'], ['Ruby', 'ruby'], ['Rust', 'rs'], ['Scala', 'scala'], ['SQL', 'sql'], ['Swift', 'swift'], ['TypeScript', 'typescript'], ['XML', 'xml'], ['YAML', 'yaml']
+    ] %}
+        <li style="margin-bottom:6px;display:flex;align-items:center;">
+            <input type="checkbox" {% if lang[1] in supported %}checked style="accent-color:#4caf50;"{% endif %} disabled>
+            <span style="margin-left:10px;font-weight:bold;">{{ lang[0] }}</span>
+            <span style="margin-left:8px;color:#888;">({{ lang[1] }})</span>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+{% block scripts %}{% endblock %}

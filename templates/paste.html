@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}View Paste · party-bin{% endblock %}
+{% block content %}
+<div class="paste-view-container">
+    <div class="paste-content" id="paste-content">
+        {{ paste_html|safe }}
+    </div>
+    <div class="paste-actions">
+        <a href="/edit/{{ slug }}" class="edit-btn">Edit</a>
+        <div class="export-dropdown">
+            <button class="export-btn">Export ▼</button>
+            <div class="export-menu">
+                <a href="/export/{{ slug }}?format=txt">.txt</a>
+                <a href="/export/{{ slug }}?format=md">.md</a>
+                <a href="/export/{{ slug }}?format=html">.html</a>
+            </div>
+        </div>
+    </div>
+    <div class="paste-meta">
+        <span>Pub: {{ paste.created_at }}</span>
+        <span>Edit: {{ paste.updated_at }}</span>
+        <span>Views: {{ paste.views }}</span>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Edit Paste · party-bin{% endblock %}
+{% block content %}
+<div class="editor-container">
+    <div class="tabs">
+        <button class="tab active" id="tab-text">Text</button>
+        <button class="tab" id="tab-preview">Preview</button>
+        <button class="tab" id="tab-how">How</button>
+    </div>
+    <div class="tab-content" id="tab-content-text">
+        <textarea id="paste-text" class="editor-textarea" placeholder="Write your Markdown here..."></textarea>
+    </div>
+    <div class="tab-content" id="tab-content-preview" style="display:none;"></div>
+    <div class="tab-content" id="tab-content-how" style="display:none;">
+print(s)</pre></td>
+        <div class="how-info">
+            <h3>Markdown Syntax Help</h3>
+            <table class="how-table" style="width:100%;border-collapse:collapse;">
+                <tr>
+                    <th style="width:50%;padding:8px 4px;text-align:left;">What you type</th>
+                    <th style="width:50%;padding:8px 4px;text-align:left;">What will be published</th>
+                </tr>
+                <tr><td># Header 1<br>## Header 2<br>### Header 3<br>#### Header 4<br>##### Header 5<br>###### Header 6</td><td><h1>Header 1</h1><h2>Header 2</h2><h3>Header 3</h3><h4>Header 4</h4><h5>Header 5</h5><h6>Header 6</h6></td></tr>
+                <tr><td>Return once starts a new line.<br>Return twice (blank line) starts a new paragraph.</td><td>Line break<br><br>New paragraph</td></tr>
+                <tr><td>*Italics*<br>**Bold**<br>~~Strikeout~~<br>==Mark==</td><td><em>Italics</em><br><strong>Bold</strong><br><del>Strikeout</del><br><mark style="background:#ffe066;color:#222;">Mark</mark></td></tr>
+                <tr><td>%red% Colored Text %%<br>%#ACBDEF% Colored Text Hex %%</td><td><span style="color:red;">Colored Text</span><br><span style="color:#ACBDEF;">Colored Text Hex</span></td></tr>
+                <tr><td>!&gt;Spoiler</td><td><span style="background:#444;color:#444;border-radius:3px;padding:2px 6px;">Spoiler</span></td></tr>
+                <tr><td>!~ Simple Underlined Text ~!<br>!~red; Underlined Text With Color ~!<br>!~green;double; Underlined Text Plus Style ~!<br>!~blue;default;line-through; Underlined Plus Type ~!<br>!~orange;default;default;7; Underlined Text Plus Thickness ~!</td><td><u>Simple Underlined Text</u><br><u style="text-decoration-color:red;">Underlined Text With Color</u><br><u style="text-decoration-style:double;color:green;">Underlined Text Plus Style</u><br><span style="text-decoration:line-through;color:blue;">Underlined Plus Type</span><br><u style="text-decoration-thickness:7px;color:orange;">Underlined Text Plus Thickness</u></td></tr>
+                <tr><td>%violet% !~green; Combine With Text Color ~! %%<br>!~violet; %green% Works The Other Way Too %% ~!</td><td><span style="color:violet;"><u style="color:green;">Combine With Text Color</u></span><br><u style="color:violet;"><span style="color:green;">Works The Other Way Too</span></u></td></tr>
+                <tr><td>-&gt; Centered text &lt;-<br>-&gt; Right-aligned -&gt;<br>Also works for images and ### -&gt; Headers &lt;-</td><td><div style="text-align:center;">Centered text</div><div style="text-align:right;">Right-aligned</div></td></tr>
+                <tr><td>[TOC]<br>[TOC2] - From h2 to h6.<br>[TOC3] - From h3 to h6, and so on up to 6.</td><td><strong>Table of Contents</strong><br>Header 1<br>Header 2<br>Another 2<br>Another 1</td></tr>
+                <tr><td>- Bulleted list item a<br>- Bulleted list item b<br>&nbsp;&nbsp;&nbsp;&nbsp;- Nested item b1<br>Nested lists use 4 spaces or 1 tab.<br>An asterisk (*) can be used instead of a dash.</td><td><ul style="margin:0;padding-left:20px;"><li>Bulleted list item a</li><li>Bulleted list item b<ul><li>Nested item b1</li></ul></li></ul></td></tr>
+                <tr><td>1. Numbered list item<br>2. Numbered list item<br>&nbsp;&nbsp;&nbsp;&nbsp;1. Nested list item<br>&nbsp;&nbsp;&nbsp;&nbsp;2. Nested list item</td><td><ol style="margin:0;padding-left:20px;"><li>Numbered list item</li><li>Numbered list item<ol><li>Nested list item</li><li>Nested list item</li></ol></li></ol></td></tr>
+                <tr><td>- [ ] Checkbox 1<br>- [x] Checkbox 2</td><td><input type="checkbox"> Checkbox 1<br><input type="checkbox" checked> Checkbox 2</td></tr>
+                <tr><td>[//]: (comment here)<br>Adding [//]: () to a line will comment it out, so that it does not appear when viewing the page.</td><td><span style="color:#888;font-style:italic;">(comment here, not shown)</span></td></tr>
+                <tr><td>&gt;&gt; How to use quotes in Markdown?<br>&gt; Just prepend text with &gt;</td><td><blockquote style="border-left:3px solid #2196f3;padding-left:8px;">How to use quotes in Markdown?<br>Just prepend text with &gt;</blockquote></td></tr>
+                <tr><td><pre>``` python<br>s = "Triple backticks ( ``` ) generate code block"<br>print(s)<br>```</pre><br>For the list of supported languages see the langs page.</td><td><pre style="background:#222;color:#fff;padding:8px;border-radius:4px;">s = "Triple backticks ( ``` ) generate code block"
+    </div>
+                <tr><td>Single backtick generates `inline code`</td><td><code>inline code</code></td></tr>
+                <tr><td>***<br>Horizontal rule, &lt;hr&gt;</td><td><hr></td></tr>
+                <tr><td>\*not italics\*<br>To produce a literal asterisk or any symbol used in Markdown, use backslash to escape it.</td><td>*not italics*</td></tr>
+                <tr><td>Header | Header<br>------ | ------<br>Cell   | Cell<br>Cell   | Cell<br>Columns can be aligned to the right with --: and centered with :--:.</td><td><table style="width:100%;border-collapse:collapse;"><tr><th style="border-bottom:1px solid #444;">Header</th><th style="border-bottom:1px solid #444;">Header</th></tr><tr><td>Cell</td><td>Cell</td></tr><tr><td>Cell</td><td>Cell</td></tr></table></td></tr>
+                <tr><td>Center | Right<br>:----: | ----:<br>Cell   | Cell<br>Cell   | Cell</td><td><table style="width:100%;border-collapse:collapse;"><tr><th style="text-align:center;">Center</th><th style="text-align:right;">Right</th></tr><tr><td style="text-align:center;">Cell</td><td style="text-align:right;">Cell</td></tr><tr><td style="text-align:center;">Cell</td><td style="text-align:right;">Cell</td></tr></table></td></tr>
+                <tr><td>!!! note Admonition title<br>&nbsp;&nbsp;&nbsp;&nbsp;Admonition text<br>Main types: info, note, warning, danger. Defaults to warning.<br>Additional types: greentext<br>!!! info<br>&nbsp;&nbsp;&nbsp;&nbsp;Title or text can be skipped</td><td><div style="border-left:4px solid #fbc02d;background:#333;padding:8px 12px;margin-bottom:8px;"><strong>note</strong> Admonition title<br>Admonition text</div><div style="border-left:4px solid #2196f3;background:#333;padding:8px 12px;margin-bottom:8px;"><strong>info</strong> Title or text can be skipped</div></td></tr>
+                <tr><td>Autolinks:<br>https://rentry.co/ or rentry.co</td><td>Autolinks:<br><a href="https://rentry.co">https://rentry.co</a> or rentry.co</td></tr>
+                <tr><td>Link description:<br>[Markdown paste service](https://rentry.co)<br>Be sure to include the "http(s)://" part of the link.</td><td>Link description:<br><a href="https://rentry.co">Markdown paste service</a></td></tr>
+                <tr><td>![Alt Tag](https://i.imgur.com/PYV4crq.png)<br>![Alt Tag](https://i.imgur.com/PYV4crq.png){100px:100px}<br>![Alt Tag](https://i.imgur.com/PYV4crq.png "Title")<br>![Alt Tag](https://i.imgur.com/PYV4crq.png#left)</td><td><img src="https://i.imgur.com/PYV4crq.png" alt="Alt Tag" style="max-width:100px;max-height:100px;"><br><img src="https://i.imgur.com/PYV4crq.png" alt="Alt Tag" style="width:100px;height:100px;"><br><img src="https://i.imgur.com/PYV4crq.png" alt="Alt Tag" title="Title"><br><img src="https://i.imgur.com/PYV4crq.png" alt="Alt Tag" style="float:left;max-width:100px;max-height:100px;"></td></tr>
+                <tr><td>Images can be links by wrapping them:<br>[![Alt Tag](https://i.imgur.com/PYV4crq.png)](https://rentry.co)</td><td><a href="https://rentry.co"><img src="https://i.imgur.com/PYV4crq.png" alt="Alt Tag" style="max-width:100px;max-height:100px;"></a></td></tr>
+                <tr><td>Create a Youtube image link by coping the part after v= into the static image link:<br>[![Alt Tag](https://img.youtube.com/vi/xyz/hqdefault.jpg){300px:200px}](https://youtube.com/watch?v=xyz)</td><td><a href="https://youtube.com/watch?v=xyz"><img src="https://img.youtube.com/vi/xyz/hqdefault.jpg" alt="Alt Tag" style="width:300px;height:200px;"></a></td></tr>
+                <tr><td>Float Clear:<br>!;<br>Makes all following content sit below a previous image float. Useful to fix broken layouts after adding a float. Make sure to leave an empty line above.</td><td><div style="clear:both;"></div></td></tr>
+            </table>
+        </div>
+    <div class="metadata-toggle" onclick="toggleMetadata()">+ Metadata</div>
+    <div class="metadata-fields" id="metadata-fields" style="display:none;">
+        <input type="text" id="title" placeholder="Title (optional)">
+        <input type="text" id="edit_code" placeholder="Custom edit code">
+        <input type="text" id="custom_url" placeholder="Custom url">
+    </div>
+    <button class="go-btn" id="go-btn">Go</button>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/editor.js"></script>
+{% endblock %}

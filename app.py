@@ -8,6 +8,7 @@ Este repositorio contiene PartyBin, una aplicación web desarrollada en Python c
 🧠 TU TAREA (GitHub Copilot + Visual Studio Code):
 
 Lee cuidadosamente el archivo README.md de este repositorio.
+
 A partir de la descripción completa allí incluida, **genera la estructura de carpetas, archivos y lógica necesaria** para que PartyBin funcione exactamente como se especifica, sin añadir ni omitir funcionalidades.
 
 ✅ FUNCIONALIDADES CLAVE A RESPETAR:
@@ -42,4 +43,46 @@ Gracias, Copilot.
 """
 
 # Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+from flask import Flask, render_template, request
+from flask import redirect, url_for
+import markdown2
+
+app = Flask(__name__)
+
+# Redirección de inicio al editor
+@app.route('/')
+def index():
+	return redirect(url_for('edit'))
+# Editor de pastes
+@app.route('/edit')
+def edit():
+	return render_template('edit.html')
+
+# Vista previa de Markdown
+@app.route('/preview', methods=['POST'])
+def preview():
+	data = request.get_json()
+	text = data.get('text', '')
+	html = markdown2.markdown(text)
+	return html
+
+# Visualización de paste publicado
+@app.route('/<slug>')
+def view_paste(slug):
+	# Datos dummy para demo visual
+	paste = {
+		'created_at': '30 Jun 2025 07:51 UTC',
+		'updated_at': '25 Jul 2025 14:43 UTC',
+		'views': 11
+	}
+	paste_html = markdown2.markdown("# Example Paste\nThis is a demo paste.")
+	return render_template('paste.html', paste=paste, paste_html=paste_html, slug=slug)
+
+# Ruta para mostrar lenguajes soportados
+@app.route('/langs')
+def langs():
+	return render_template('langs.html')
+
+if __name__ == '__main__':
+	app.run(debug=True)
 
