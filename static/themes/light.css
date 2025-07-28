@@ -1,0 +1,8 @@
+/* light.css - Tema claro */
+:root {
+    --bg: #f7f7fa;
+    --fg: #222;
+    --panel-bg: #fff;
+    --accent: #4f8cff;
+    --accent-hover: #2563eb;
+}

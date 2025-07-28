@@ -1,0 +1,6 @@
+Flask
+nicegui
+markdown2
+pygments
+python-slugify
+qrcode

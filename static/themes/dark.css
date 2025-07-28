@@ -1,0 +1,8 @@
+/* dark.css - Tema oscuro */
+:root {
+    --bg: #18181b;
+    --fg: #f3f3f3;
+    --panel-bg: #23232a;
+    --accent: #7c3aed;
+    --accent-hover: #5b21b6;
+}

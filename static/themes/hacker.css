@@ -1,0 +1,8 @@
+/* hacker.css - Tema hacker/monokai */
+:root {
+    --bg: #1a1c1d;
+    --fg: #e5e5e5;
+    --panel-bg: #232323;
+    --accent: #39ff14;
+    --accent-hover: #00c805;
+}

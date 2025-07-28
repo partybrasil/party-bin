@@ -1,0 +1,13 @@
+/* monokai.css - Pygments Monokai para bloques de código */
+.code-block {
+    background: #272822;
+    color: #f8f8f2;
+}
+.token.comment { color: #75715e; }
+.token.keyword { color: #f92672; }
+.token.string { color: #e6db74; }
+.token.function { color: #a6e22e; }
+.token.number { color: #ae81ff; }
+.token.operator { color: #f8f8f2; }
+.token.class { color: #66d9ef; }
+.token.constant { color: #fd971f; }
