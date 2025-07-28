@@ -16,6 +16,7 @@
         </select>
     </label><br>
     <label>Contraseña (si protegida): <input type="password" name="password"></label><br>
+    <label><input type="checkbox" name="privado" {% if paste.privado %}checked{% endif %}> Privado</label><br>
     <label>Firma/Alias: <input type="text" name="author" value="{{ paste.author }}"></label><br>
     <label>Tags: <input type="text" name="tags" value="{{ paste.tags|join(', ') }}"></label><br>
     <button type="submit">Guardar Cambios</button>

@@ -10,14 +10,64 @@
     <span>Autor: {{ paste.author or 'Anónimo' }}</span>
 </div>
 <div class="paste-content">
-    {{ paste.rendered_content|safe }}
+    {% if privado %}
+        <div class="private-warning">Este paste es privado. Ingresa la contraseña para ver el contenido.</div>
+    {% else %}
+        {{ paste.rendered_content|safe }}
+    {% endif %}
 </div>
 <div class="actions">
-    <a href="/raw/{{ paste.url }}">Raw</a>
-    <a href="/export/{{ paste.url }}?type=txt">Descargar TXT</a>
-    <a href="/export/{{ paste.url }}?type=md">Descargar MD</a>
-    <a href="/export/{{ paste.url }}?type=html">Descargar HTML</a>
-    <a href="/qr/{{ paste.url }}">QR</a>
-    <a href="/edit/{{ paste.url }}">Editar</a>
+    <button class="action-btn" data-action="raw" data-url="/raw/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>Raw</button>
+    <button class="action-btn" data-action="export-txt" data-url="/export/{{ paste.url }}?type=txt" {% if privado %}data-privado="1"{% endif %}>Descargar TXT</button>
+    <button class="action-btn" data-action="export-md" data-url="/export/{{ paste.url }}?type=md" {% if privado %}data-privado="1"{% endif %}>Descargar MD</button>
+    <button class="action-btn" data-action="export-html" data-url="/export/{{ paste.url }}?type=html" {% if privado %}data-privado="1"{% endif %}>Descargar HTML</button>
+    <button class="action-btn" data-action="qr" data-url="/qr/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>QR</button>
+    <button class="action-btn" data-action="edit" data-url="/edit/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>Editar</button>
 </div>
+{% block scripts %}
+<script>
+document.querySelectorAll('.action-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var url = btn.getAttribute('data-url');
+        var privado = btn.getAttribute('data-privado');
+        if (privado) {
+            Swal.fire({
+                title: 'Protegido',
+                text: 'Este paste está protegido. Introduce la contraseña:',
+                input: 'password',
+                inputPlaceholder: 'Contraseña',
+                showCancelButton: true,
+                confirmButtonText: 'Continuar',
+                cancelButtonText: 'Cancelar',
+                inputAttributes: {
+                  autocapitalize: 'off',
+                  autocomplete: 'off'
+                }
+            }).then(function(result) {
+                if (result.isConfirmed && result.value) {
+                    // Crear y enviar formulario POST con contraseña
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'password';
+                    input.value = result.value;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        } else {
+            if(btn.getAttribute('data-action') === 'edit') {
+                window.location.href = url;
+            } else {
+                window.location.href = url;
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

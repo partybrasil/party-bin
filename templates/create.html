@@ -2,7 +2,7 @@
 {% block title %}Crear Paste | PartyBin{% endblock %}
 {% block content %}
 <h2>Crear nuevo Paste</h2>
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" action="{{ url_for('create_paste') }}" enctype="multipart/form-data">
     <label>Título (opcional): <input type="text" name="title"></label><br>
     <label>Contenido:<br>
         <textarea name="content" rows="15" cols="80"></textarea>
@@ -28,6 +28,7 @@
         </select>
         <input type="text" name="autodestruct_value" placeholder="Valor (minutos, vistas, etc)">
     </label><br>
+    <label><input type="checkbox" name="privado"> Privado (solo accesible con contraseña)</label><br>
     <button type="submit">Crear Paste</button>
 </form>
 {% endblock %}
