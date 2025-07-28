@@ -2,23 +2,82 @@
 {% block title %}Editar Paste | PartyBin{% endblock %}
 {% block content %}
 <h2>Editar Paste</h2>
-<form method="POST">
+<div class="tabs" style="margin-bottom:20px;">
+  <button class="tab-btn" data-tab="editor">Editor</button>
+  <button class="tab-btn" data-tab="preview">Previsualización</button>
+  <button class="tab-btn" data-tab="info">Info</button>
+</div>
+<div id="tab-editor" class="tab-content">
+  <form method="POST">
     <label>Título: <input type="text" name="title" value="{{ paste.title }}"></label><br>
     <label>Contenido:<br>
-        <textarea name="content" rows="15" cols="80">{{ paste.content }}</textarea>
+      <textarea name="content" rows="15" cols="80">{{ paste.content }}</textarea>
     </label><br>
     <label>Formato:
-        <select name="format">
-            <option value="markdown" {% if paste.format == 'markdown' %}selected{% endif %}>Markdown</option>
-            <option value="plaintext" {% if paste.format == 'plaintext' %}selected{% endif %}>Texto plano</option>
-            <option value="html" {% if paste.format == 'html' %}selected{% endif %}>HTML</option>
-            <option value="code" {% if paste.format == 'code' %}selected{% endif %}>Código</option>
-        </select>
+      <select name="format">
+        <option value="markdown" {% if paste.format == 'markdown' %}selected{% endif %}>Markdown</option>
+        <option value="plaintext" {% if paste.format == 'plaintext' %}selected{% endif %}>Texto plano</option>
+        <option value="html" {% if paste.format == 'html' %}selected{% endif %}>HTML</option>
+        <option value="code" {% if paste.format == 'code' %}selected{% endif %}>Código</option>
+      </select>
     </label><br>
     <label>Contraseña (si protegida): <input type="password" name="password"></label><br>
     <label><input type="checkbox" name="privado" {% if paste.privado %}checked{% endif %}> Privado</label><br>
     <label>Firma/Alias: <input type="text" name="author" value="{{ paste.author }}"></label><br>
     <label>Tags: <input type="text" name="tags" value="{{ paste.tags|join(', ') }}"></label><br>
     <button type="submit">Guardar Cambios</button>
-</form>
+  </form>
+</div>
+<div id="tab-preview" class="tab-content" style="display:none;">
+  <h3>Previsualización</h3>
+  <div id="preview-content" style="background:#232323;padding:16px;border-radius:6px;"></div>
+</div>
+<div id="tab-info" class="tab-content" style="display:none;">
+  <h3>Información</h3>
+  <ul>
+    <li>Edita el contenido y metadatos del paste.</li>
+    <li>El formato se puede cambiar y previsualizar.</li>
+    <li>Protección por contraseña y modo privado disponibles.</li>
+  </ul>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+// Tabs
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabContents.forEach(tc => tc.style.display = 'none');
+    document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+// Preview
+const textarea = document.querySelector('textarea[name="content"]');
+const previewDiv = document.getElementById('preview-content');
+const formatSelect = document.querySelector('select[name="format"]');
+function renderPreview() {
+  let content = textarea.value;
+  let format = formatSelect.value;
+  if (format === 'markdown') {
+    if (window.marked) {
+      previewDiv.innerHTML = marked.parse(content);
+    } else {
+      previewDiv.textContent = content;
+    }
+  } else if (format === 'html') {
+    previewDiv.innerHTML = content;
+  } else if (format === 'code') {
+    previewDiv.innerHTML = '<pre>' + content + '</pre>';
+  } else {
+    previewDiv.textContent = content;
+  }
+}
+if (textarea && previewDiv && formatSelect) {
+  textarea.addEventListener('input', renderPreview);
+  formatSelect.addEventListener('change', renderPreview);
+  renderPreview();
+}
+</script>
 {% endblock %}

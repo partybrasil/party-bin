@@ -1,2 +1,97 @@
-body { background: #222; color: #f8f8f8; }
-.container { background: #333; }
+body {
+  background: #181818;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  background: #232323;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #000a;
+  margin: 32px auto;
+  padding: 32px 24px;
+  max-width: 800px;
+}
+h2 {
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+label {
+  color: #bdbdbd;
+  font-size: 15px;
+  margin-bottom: 8px;
+  display: block;
+}
+input, textarea, select, button {
+  background: #222;
+  color: #f8f8f8;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid #4e8cff;
+}
+button {
+  background: #222;
+  color: #fff;
+  border: 1px solid #4e8cff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #4e8cff;
+  color: #fff;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+th, td {
+  border: 1px solid #444;
+  padding: 8px 10px;
+  text-align: left;
+}
+th {
+  background: #222;
+  color: #4e8cff;
+}
+tr:nth-child(even) {
+  background: #232323;
+}
+tr:nth-child(odd) {
+  background: #181818;
+}
+.admin-actions button {
+  margin-right: 8px;
+}
+.action-btn {
+  background: #222;
+  color: #4e8cff;
+  border: 1px solid #4e8cff;
+  margin-right: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.action-btn:hover {
+  background: #4e8cff;
+  color: #fff;
+}
+.private-warning {
+  background: #4e8cff;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+.metadata span {
+  margin-right: 16px;
+  color: #bdbdbd;
+}

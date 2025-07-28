@@ -9,12 +9,33 @@
     <span>Tags: {{ paste.tags|join(', ') }}</span>
     <span>Autor: {{ paste.author or 'Anónimo' }}</span>
 </div>
-<div class="paste-content">
+<div class="tabs" style="margin-bottom:20px;">
+  <button class="tab-btn" data-tab="view">Visualización</button>
+  <button class="tab-btn" data-tab="raw">Raw</button>
+  <button class="tab-btn" data-tab="info">Info</button>
+</div>
+<div id="tab-view" class="tab-content">
+  <div class="paste-content">
     {% if privado %}
-        <div class="private-warning">Este paste es privado. Ingresa la contraseña para ver el contenido.</div>
+      <div class="private-warning">Este paste es privado. Ingresa la contraseña para ver el contenido.</div>
     {% else %}
-        {{ paste.rendered_content|safe }}
+      {{ paste.rendered_content|safe }}
     {% endif %}
+  </div>
+</div>
+<div id="tab-raw" class="tab-content" style="display:none;">
+  <h3>Raw</h3>
+  <pre style="background:#232323;padding:16px;border-radius:6px;">{{ paste.content }}</pre>
+</div>
+<div id="tab-info" class="tab-content" style="display:none;">
+  <h3>Información</h3>
+  <ul>
+    <li>Formato: {{ paste.format }}</li>
+    <li>Protegido: {% if paste.password %}Sí{% else %}No{% endif %}</li>
+    <li>Privado: {% if paste.privado %}Sí{% else %}No{% endif %}</li>
+    <li>Autodestrucción: {{ paste.autodestruct }}</li>
+    <li>Tags: {{ paste.tags|join(', ') }}</li>
+  </ul>
 </div>
 <div class="actions">
     <button class="action-btn" data-action="raw" data-url="/raw/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>Raw</button>
@@ -26,6 +47,17 @@
 </div>
 {% block scripts %}
 <script>
+// Tabs
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabContents.forEach(tc => tc.style.display = 'none');
+    document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
 document.querySelectorAll('.action-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
