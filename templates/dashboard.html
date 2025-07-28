@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Admin | PartyBin{% endblock %}
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 max-w-3xl mx-auto">
+    <h2 class="card-title mb-4">Dashboard Admin</h2>
+    {% if pastes %}
+    <div class="mb-4 flex justify-end">
+        <a href="/logout_admin" class="btn btn-outline btn-error">Cerrar sesión admin</a>
+    </div>
+    {% endif %}
+    {% if not pastes %}
+    <form method="POST" class="mb-6">
+        <div class="form-control mb-4">
+            <label class="label">Clave secreta de admin</label>
+            <input type="password" name="admin_key" class="input input-bordered" required>
+        </div>
+        <button type="submit" class="btn btn-secondary w-full">Acceder</button>
+    </form>
+    {% endif %}
+    {% if pastes %}
+    <div class="overflow-x-auto">
+        <table class="table w-full">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Autor</th>
+                    <th>Tags</th>
+                    <th>Vistas</th>
+                    <th>Creado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paste in pastes %}
+                <tr>
+                    <td><a href="/paste/{{ paste.url }}" class="link">{{ paste.url }}</a></td>
+                    <td>{{ paste.author }}</td>
+                    <td>{{ paste.tags|join(', ') }}</td>
+                    <td>{{ paste.views }}</td>
+                    <td>{{ paste.created_at[:19].replace('T', ' ') }}</td>
+                    <td>
+                        <a href="/edit/{{ paste.url }}" class="btn btn-xs btn-primary">Editar</a>
+                        <a href="/delete/{{ paste.url }}?admin=1" class="btn btn-xs btn-error">Borrar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

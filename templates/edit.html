@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paste | PartyBin{% endblock %}
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 max-w-2xl mx-auto">
+    <h2 class="card-title mb-4">Editar Paste</h2>
+    <form method="POST">
+        <div class="form-control mb-4">
+            <label class="label">Contenido (Markdown soportado)</label>
+            <textarea name="content" id="content" class="textarea textarea-bordered h-40" required oninput="updatePreview()">{{ paste.content }}</textarea>
+        </div>
+        <div class="form-control mb-4">
+            <label class="label">Firma/Alias (opcional)</label>
+            <input type="text" name="author" class="input input-bordered" value="{{ paste.author }}">
+        </div>
+        <div class="form-control mb-4">
+            <label class="label">Tags (separados por coma)</label>
+            <input type="text" name="tags" class="input input-bordered" value="{{ paste.tags|join(', ') }}">
+        </div>
+        <div class="form-control mb-4">
+            <label class="label">Contraseña de edición</label>
+            <input type="password" name="password" class="input input-bordered" placeholder="Contraseña" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Guardar Cambios</button>
+    </form>
+    <div class="mt-8">
+        <h3 class="text-lg font-bold mb-2">Previsualización en vivo</h3>
+        <div id="preview" class="prose max-w-none bg-base-200 p-4 rounded"></div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<!-- marked.js para render Markdown en frontend -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+function updatePreview() {
+    const content = document.getElementById('content').value;
+    const preview = document.getElementById('preview');
+    preview.innerHTML = marked.parse(content);
+    document.querySelectorAll('#preview pre code').forEach((block) => {
+        hljs.highlightElement(block);
+    });
+}
+document.addEventListener('DOMContentLoaded', updatePreview);
+</script>
+{% endblock %}

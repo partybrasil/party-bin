@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Ver Paste | PartyBin{% endblock %}
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 max-w-2xl mx-auto">
+    <h2 class="card-title mb-4">Paste</h2>
+    <div class="mb-4">
+        <span class="badge badge-outline">{{ paste.url }}</span>
+        {% if paste.author %}<span class="badge badge-info ml-2">{{ paste.author }}</span>{% endif %}
+        {% if paste.tags %}<span class="badge badge-success ml-2">{{ paste.tags|join(', ') }}</span>{% endif %}
+    </div>
+    <div class="prose max-w-none">
+        {{ paste.html|safe }}
+    </div>
+    <div class="mt-4 flex gap-2">
+        <button class="btn btn-outline" onclick="copyToClipboard('{{ paste.raw|escape }}')">Copiar Raw</button>
+        <a href="/export/{{ paste.url }}?format=md" class="btn btn-outline">Descargar .md</a>
+        <a href="/export/{{ paste.url }}?format=txt" class="btn btn-outline">Descargar .txt</a>
+        <a href="/export/{{ paste.url }}?format=html" class="btn btn-outline">Descargar .html</a>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/utils.js"></script>
+{% endblock %}

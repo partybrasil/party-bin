@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Paste Protegido | PartyBin{% endblock %}
+{% block content %}
+<div class="card bg-base-100 shadow-xl p-6 max-w-xl mx-auto">
+    <h2 class="card-title mb-4">Paste Protegido</h2>
+    <form method="POST">
+        <div class="form-control mb-4">
+            <label class="label">Ingresa la contraseña para ver el contenido:</label>
+            <input type="password" name="password" class="input input-bordered" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Ver Paste</button>
+    </form>
+</div>
+{% endblock %}

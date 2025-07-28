@@ -1,0 +1,4 @@
+# Clave secreta para dashboard admin
+ADMIN_KEY = "123231"
+
+base de PartyBin usando Flask para el backend y Tailwind CSS + DaisyUI + Highlight.js para el frontend, con soporte para Markdown y una UI moderna tipo Pastebin, lista para deploy en Render

@@ -42,4 +42,188 @@ Gracias, Copilot.
 """
 
 # Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, session
+import os
+import json
+import uuid
+from datetime import datetime
+import markdown2
+
+
+# Clave secreta para dashboard admin
+ADMIN_KEY = "123231"
+
+app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'partybin-secret')
+
+# Carpeta de pastes
+PASTES_DIR = os.path.join(os.path.dirname(__file__), 'data', 'pastes')
+os.makedirs(PASTES_DIR, exist_ok=True)
+
+def save_paste(data, paste_id):
+	path = os.path.join(PASTES_DIR, f'{paste_id}.json')
+	with open(path, 'w', encoding='utf-8') as f:
+		json.dump(data, f, ensure_ascii=False, indent=2)
+
+def load_paste(paste_id):
+	path = os.path.join(PASTES_DIR, f'{paste_id}.json')
+	if not os.path.exists(path):
+		return None
+	with open(path, 'r', encoding='utf-8') as f:
+		return json.load(f)
+
+def list_pastes():
+	files = [f for f in os.listdir(PASTES_DIR) if f.endswith('.json')]
+	pastes = []
+	for fname in files:
+		with open(os.path.join(PASTES_DIR, fname), 'r', encoding='utf-8') as f:
+			pastes.append(json.load(f))
+	return sorted(pastes, key=lambda p: p.get('created_at', ''), reverse=True)
+
+def generate_id():
+	return uuid.uuid4().hex[:8]
+
+@app.route('/')
+def index():
+	return render_template('create.html')
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+	if request.method == 'POST':
+		content = request.form.get('content', '').strip()
+		custom_url = request.form.get('custom_url', '').strip()
+		author = request.form.get('author', '').strip()
+		protect = request.form.get('protect') == 'on'
+		password = request.form.get('password', '').strip() if protect else ''
+		tags = [t.strip() for t in request.form.get('tags', '').split(',') if t.strip()]
+		paste_id = custom_url if custom_url else generate_id()
+		if os.path.exists(os.path.join(PASTES_DIR, f'{paste_id}.json')):
+			flash('La URL personalizada ya existe. Elige otra.', 'error')
+			return render_template('create.html')
+		html = markdown2.markdown(content, extras=["fenced-code-blocks", "tables", "strike", "task_list", "code-friendly"])
+		paste = {
+			'url': paste_id,
+			'content': content,
+			'html': html,
+			'author': author,
+			'protect': protect,
+			'password': password,
+			'tags': tags,
+			'created_at': datetime.utcnow().isoformat(),
+			'views': 0,
+			'raw': content
+		}
+		save_paste(paste, paste_id)
+		return redirect(url_for('view_paste', paste_id=paste_id))
+	return render_template('create.html')
+
+@app.route('/paste/<paste_id>')
+def view_paste(paste_id):
+	paste = load_paste(paste_id)
+	if not paste:
+		flash('Paste no encontrado.', 'error')
+		return redirect(url_for('index'))
+	# Si está protegido y es privado, requiere contraseña para ver
+	if paste.get('protect', False):
+		if request.method == 'POST':
+			password = request.form.get('password', '')
+			if password == paste.get('password', ''):
+				paste['views'] += 1
+				save_paste(paste, paste_id)
+				return render_template('view.html', paste=paste)
+			else:
+				flash('Contraseña incorrecta.', 'error')
+		return render_template('private.html')
+	# No protegido
+	paste['views'] += 1
+	save_paste(paste, paste_id)
+	return render_template('view.html', paste=paste)
+
+@app.route('/paste/<paste_id>', methods=['POST'])
+def view_paste_post(paste_id):
+	return view_paste(paste_id)
+@app.route('/edit/<paste_id>', methods=['GET', 'POST'])
+def edit_paste(paste_id):
+	paste = load_paste(paste_id)
+	if not paste:
+		flash('Paste no encontrado.', 'error')
+		return redirect(url_for('index'))
+	if request.method == 'POST':
+		password = request.form.get('password', '')
+		if paste.get('protect', False) and password != paste.get('password', ''):
+			flash('Contraseña incorrecta.', 'error')
+			return render_template('edit.html', paste=paste)
+		content = request.form.get('content', '').strip()
+		author = request.form.get('author', '').strip()
+		tags = [t.strip() for t in request.form.get('tags', '').split(',') if t.strip()]
+		html = markdown2.markdown(content, extras=["fenced-code-blocks", "tables", "strike", "task_list", "code-friendly"])
+		paste['content'] = content
+		paste['html'] = html
+		paste['author'] = author
+		paste['tags'] = tags
+		paste['raw'] = content
+		save_paste(paste, paste_id)
+		flash('Paste actualizado.', 'success')
+		return redirect(url_for('view_paste', paste_id=paste_id))
+	return render_template('edit.html', paste=paste)
+@app.route('/delete/<paste_id>')
+def delete_paste(paste_id):
+	admin = request.args.get('admin') == '1'
+	if not admin:
+		flash('Acceso denegado.', 'error')
+		return redirect(url_for('index'))
+	path = os.path.join(PASTES_DIR, f'{paste_id}.json')
+	if os.path.exists(path):
+		os.remove(path)
+		flash('Paste eliminado.', 'success')
+	else:
+		flash('Paste no encontrado.', 'error')
+	return redirect(url_for('dashboard'))
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+	if request.method == 'POST':
+		admin_key = request.form.get('admin_key', '')
+		if admin_key == ADMIN_KEY:
+			session['is_admin'] = True
+			return redirect(url_for('dashboard'))
+		else:
+			flash('Clave admin incorrecta.', 'error')
+			return render_template('dashboard.html', pastes=None)
+	if session.get('is_admin'):
+		pastes = list_pastes()
+		return render_template('dashboard.html', pastes=pastes)
+	return render_template('dashboard.html', pastes=None)
+
+@app.route('/logout_admin')
+def logout_admin():
+	session.pop('is_admin', None)
+	flash('Sesión admin cerrada.', 'success')
+	return redirect(url_for('dashboard'))
+
+@app.route('/export/<paste_id>')
+def export_paste(paste_id):
+	fmt = request.args.get('format', 'md')
+	paste = load_paste(paste_id)
+	if not paste:
+		flash('Paste no encontrado.', 'error')
+		return redirect(url_for('index'))
+	filename = f'{paste_id}.{fmt}'
+	if fmt == 'md':
+		content = paste['content']
+		mimetype = 'text/markdown'
+	elif fmt == 'txt':
+		content = paste['content']
+		mimetype = 'text/plain'
+	elif fmt == 'html':
+		content = paste['html']
+		mimetype = 'text/html'
+	else:
+		flash('Formato no soportado.', 'error')
+		return redirect(url_for('view_paste', paste_id=paste_id))
+	return app.response_class(content, mimetype=mimetype, headers={
+		'Content-Disposition': f'attachment; filename={filename}'
+	})
+
+if __name__ == '__main__':
+	app.run(debug=True)
 
