@@ -1,14 +1,14 @@
-# 👇 PROMPT MAESTRO PARA COPILOT – PARTYBIN
+# 👇 PROMPT MAESTRO PARA COPILOT – PARTY-BIN
 
 """
 📌 CONTEXTO DEL PROYECTO:
 
-Este repositorio contiene PartyBin, una aplicación web desarrollada en Python con Flask, diseñada como un clon personalizado de Rentry.org, pero con muchas funciones avanzadas añadidas.
+Este repositorio contiene PARTY-BIN, una aplicación web desarrollada en Python con Flask, diseñada como un clon personalizado de Rentry.org, pero con muchas funciones avanzadas añadidas.
 
 🧠 TU TAREA (GitHub Copilot + Visual Studio Code):
 
 Lee cuidadosamente el archivo README.md de este repositorio.
-A partir de la descripción completa allí incluida, **genera la estructura de carpetas, archivos y lógica necesaria** para que PartyBin funcione exactamente como se especifica, sin añadir ni omitir funcionalidades.
+A partir de la descripción completa allí incluida, **genera la estructura de carpetas, archivos y lógica necesaria** para que PARTY-BIN funcione exactamente como se especifica, sin añadir ni omitir funcionalidades.
 
 ✅ FUNCIONALIDADES CLAVE A RESPETAR:
 

@@ -1,7 +1,7 @@
 ---
-description: 'Chat mode personalizado para el proyecto PartyBin, una aplicación pastebin avanzada
+description: 'Chat mode personalizado para el proyecto PARTY-BIN, una aplicación pastebin avanzada
   desarrollada en Flask con Python. Este modo guía a Copilot Chat GPT-4.1 para entender
-  la estructura, funcionalidades y flujo de trabajo del proyecto PartyBin, facilitando
+  la estructura, funcionalidades y flujo de trabajo del proyecto PARTY-BIN, facilitando
   la creación, edición y mantenimiento de código sin perder contexto'
 tools: ['changes', 'codebase', 'editFiles', 'extensions', 'fetch', 'findTestFiles', 'githubRepo', 'new', 'openSimpleBrowser', 'problems', 'runCommands', 'runNotebooks', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'usages', 'vscodeAPI', 'activePullRequest', 'copilotCodingAgent', 'configurePythonEnvironment', 'getPythonEnvironmentInfo', 'getPythonExecutableCommand', 'installPythonPackage']
 ---
