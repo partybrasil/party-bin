@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | party-bin{% endblock %}
+{% block content %}
+    <div class="card w-full max-w-3xl mx-auto bg-gradient-to-br from-base-100 via-base-200 to-accent shadow-2xl animate__animated animate__fadeIn animate__slower">
+    <div class="card-body">
+        <h2 class="card-title text-2xl mb-2">📊 Dashboard de Pastes</h2>
+        <form method="POST" class="mb-4 flex gap-2">
+            <input type="password" name="secret" class="input input-bordered flex-1" placeholder="Clave secreta para acceder">
+            <button class="btn btn-accent">Entrar</button>
+        </form>
+        {% if pastes %}
+        <div class="overflow-x-auto">
+            <table class="table w-full animate__animated animate__fadeInUp">
+                <thead>
+                    <tr>
+                        <th>URL</th>
+                        <th>Título</th>
+                        <th>Vistas</th>
+                        <th>Expira</th>
+                        <th>Tags</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paste in pastes %}
+                    <tr class="animate__animated animate__pulse animate__faster">
+                        <td><a href="/{{ paste.url }}" class="link">{{ paste.url }}</a></td>
+                        <td>{{ paste.title }}</td>
+                        <td>{{ paste.views }}</td>
+                        <td>{% if paste.expires_at %}{{ paste.expires_at.strftime('%Y-%m-%d %H:%M') }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if paste.tags %}
+                                {% for tag in paste.tags.split(',') %}
+                                    <a href="/tag/{{ tag.strip() }}" class="badge badge-info mx-1 animate__animated animate__bounceIn">#{{ tag.strip() }}</a>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/edit/{{ paste.url }}" class="btn btn-xs btn-outline">Editar</a>
+                            <a href="/delete/{{ paste.url }}" class="btn btn-xs btn-error">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

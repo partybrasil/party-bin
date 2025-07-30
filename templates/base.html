@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}party-bin{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+    <link href="/static/css/custom.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+    <script src="/static/js/custom.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-base-200 min-h-screen animate__animated animate__fadeIn">
+    <div class="navbar bg-gradient-to-r from-primary via-accent to-secondary shadow-2xl animate__animated animate__fadeInDown animate__slower animate__infinite">
+        <div class="flex-1">
+            <a href="/" class="btn btn-ghost normal-case text-xl">🎉 party-bin</a>
+        </div>
+        <div class="flex-none">
+            <button class="btn btn-square btn-ghost" onclick="toggleTheme()">
+                <i class="fas fa-adjust"></i>
+            </button>
+        </div>
+    </div>
+    <main class="container mx-auto py-8 animate__animated animate__fadeInUp animate__faster">
+        {% block content %}{% endblock %}
+    </main>
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50"></div>
+    <div class="fixed top-4 left-4 z-50 animate__animated animate__bounceInDown">
+        <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" alt="party" class="w-16 h-16 rounded-full shadow-lg border-4 border-accent animate__animated animate__tada animate__infinite" />
+    </div>
+    <script>
+        hljs.highlightAll();
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themes = ['light','dark','cupcake','bumblebee','emerald','corporate','synthwave','retro','cyberpunk','valentine','halloween'];
+            let current = html.getAttribute('data-theme') || 'light';
+            let idx = themes.indexOf(current);
+            let next = themes[(idx+1)%themes.length];
+            html.setAttribute('data-theme', next);
+            showToast('🌈 Tema cambiado: ' + next);
+        }
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-info shadow-lg animate__animated animate__fadeInUp mb-2';
+            toast.innerHTML = `<span>${msg}</span>`;
+            document.getElementById('toast-container').appendChild(toast);
+            setTimeout(()=>toast.remove(), 2500);
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

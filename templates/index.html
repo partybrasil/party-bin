@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Inicio | party-bin{% endblock %}
+{% block content %}
+<div class="card w-full max-w-2xl mx-auto bg-base-100 shadow-xl animate__animated animate__zoomIn">
+    <div class="card-body">
+        <h2 class="card-title text-3xl mb-2">📝 Nuevo Paste</h2>
+    <form method="POST" action="/" class="space-y-4 animate__animated animate__fadeIn" id="paste-form">
+            <input type="text" name="title" class="input input-bordered w-full" placeholder="Título opcional">
+            <div class="tabs tabs-boxed mb-2 animate__animated animate__fadeInUp">
+                <a class="tab tab-active" id="tab-edit" onclick="showTab('edit')">✍️ Editar</a>
+                <a class="tab" id="tab-preview" onclick="showTab('preview')">👁️ Previsualizar</a>
+            </div>
+            <div id="edit-pane">
+                <textarea name="content" class="textarea textarea-bordered w-full h-40 animate__animated animate__fadeIn" placeholder="Pega tu texto, código, markdown, etc..." required oninput="updateCounter();renderPreview();" id="paste-content"></textarea>
+                <div class="flex gap-4 text-xs text-gray-400 animate__animated animate__fadeInUp">
+                    <span id="word-count">0 palabras</span> | <span id="char-count">0 caracteres</span>
+                </div>
+            </div>
+            <div id="preview-pane" style="display:none;" class="prose max-w-none bg-base-200 p-4 rounded-lg shadow animate__animated animate__fadeIn">
+                <div id="live-preview"></div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <input type="text" name="language" class="input input-bordered flex-1" placeholder="Lenguaje (opcional)">
+                <input type="text" name="url" class="input input-bordered flex-1" placeholder="URL personalizada (opcional)">
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <input type="text" name="tags" class="input input-bordered flex-1" placeholder="Etiquetas (opcional)">
+                <input type="text" name="author" class="input input-bordered flex-1" placeholder="Firma/Alias (opcional)">
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <input type="password" name="password" class="input input-bordered flex-1" placeholder="Contraseña (opcional)">
+                <input type="text" name="edit_code" class="input input-bordered flex-1" placeholder="Código de edición (opcional)">
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <input type="number" name="max_views" class="input input-bordered flex-1" placeholder="Vistas máximas (opcional)">
+                <input type="datetime-local" name="expires_at" class="input input-bordered flex-1" placeholder="Expira en (opcional)">
+                <label class="label cursor-pointer">
+                    <span class="label-text">One-time view</span>
+                    <input type="checkbox" name="one_time" class="checkbox checkbox-primary ml-2">
+                </label>
+                <label class="label cursor-pointer">
+                    <span class="label-text">Paste privado</span>
+                    <input type="checkbox" name="is_private" class="checkbox checkbox-secondary ml-2">
+                </label>
+            </div>
+            <button class="btn btn-primary w-full animate__animated animate__pulse animate__infinite">✨ Crear Paste</button>
+        </form>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
+        <script>
+        function showTab(tab) {
+            document.getElementById('tab-edit').classList.remove('tab-active');
+            document.getElementById('tab-preview').classList.remove('tab-active');
+            document.getElementById('edit-pane').style.display = 'none';
+            document.getElementById('preview-pane').style.display = 'none';
+            if(tab==='edit') {
+                document.getElementById('tab-edit').classList.add('tab-active');
+                document.getElementById('edit-pane').style.display = '';
+            } else {
+                document.getElementById('tab-preview').classList.add('tab-active');
+                document.getElementById('preview-pane').style.display = '';
+                renderPreview();
+            }
+        }
+        function renderPreview() {
+            let text = document.getElementById('paste-content').value;
+            let html = marked.parse(text, { breaks: true });
+            // Detectar imágenes y hacerlas responsivas
+            html = html.replace(/<img /g, '<img class="rounded-lg shadow-lg my-2 max-w-full h-auto animate__animated animate__pulse animate__infinite" ');
+            document.getElementById('live-preview').innerHTML = html;
+            document.querySelectorAll('#live-preview pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+        </script>
+    </div>
+</div>
+<script>
+function updateCounter() {
+    let text = document.getElementById('paste-content').value;
+    let words = text.trim().split(/\s+/).filter(Boolean);
+    document.getElementById('word-count').innerText = words.length + ' palabras';
+    document.getElementById('char-count').innerText = text.length + ' caracteres';
+}
+</script>
+{% endblock %}

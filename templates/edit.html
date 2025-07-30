@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paste | party-bin{% endblock %}
+{% block content %}
+<div class="card w-full max-w-2xl mx-auto bg-base-100 shadow-xl animate__animated animate__fadeIn">
+    <div class="card-body">
+        <h2 class="card-title text-2xl mb-2">✏️ Editar Paste</h2>
+        <form method="POST" class="space-y-4 animate__animated animate__fadeIn" id="edit-form">
+            <div class="tabs tabs-boxed mb-2 animate__animated animate__fadeInUp">
+                <a class="tab tab-active" id="tab-edit" onclick="showTab('edit')">✏️ Editar</a>
+                <a class="tab" id="tab-preview" onclick="showTab('preview')">👁️ Previsualizar</a>
+            </div>
+            <div id="edit-pane">
+                <input type="text" name="title" class="input input-bordered w-full" value="{{ paste.title }}" placeholder="Título opcional">
+                <textarea name="content" class="textarea textarea-bordered w-full h-40" id="paste-content" oninput="renderPreview()">{{ paste.content }}</textarea>
+                <input type="text" name="language" class="input input-bordered w-full" value="{{ paste.language }}" placeholder="Lenguaje (opcional)">
+                <input type="text" name="tags" class="input input-bordered w-full" value="{{ paste.tags }}" placeholder="Etiquetas (opcional)">
+                <input type="text" name="author" class="input input-bordered w-full" value="{{ paste.author }}" placeholder="Firma/Alias (opcional)">
+                <input type="password" name="password" class="input input-bordered w-full" placeholder="Contraseña (si aplica)">
+                <button class="btn btn-primary w-full animate__animated animate__pulse animate__infinite">💾 Guardar Cambios</button>
+            </div>
+            <div id="preview-pane" style="display:none;" class="prose max-w-none bg-base-200 p-4 rounded-lg shadow animate__animated animate__fadeIn">
+                <div id="live-preview"></div>
+            </div>
+        </form>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
+        <script>
+        function showTab(tab) {
+            document.getElementById('tab-edit').classList.remove('tab-active');
+            document.getElementById('tab-preview').classList.remove('tab-active');
+            document.getElementById('edit-pane').style.display = 'none';
+            document.getElementById('preview-pane').style.display = 'none';
+            if(tab==='edit') {
+                document.getElementById('tab-edit').classList.add('tab-active');
+                document.getElementById('edit-pane').style.display = '';
+            } else {
+                document.getElementById('tab-preview').classList.add('tab-active');
+                document.getElementById('preview-pane').style.display = '';
+                renderPreview();
+            }
+        }
+        function renderPreview() {
+            let text = document.getElementById('paste-content').value;
+            let html = marked.parse(text, { breaks: true });
+            html = html.replace(/<img /g, '<img class="rounded-lg shadow-lg my-2 max-w-full h-auto animate__animated animate__pulse animate__infinite" ');
+            document.getElementById('live-preview').innerHTML = html;
+            document.querySelectorAll('#live-preview pre code').forEach((el) => {
+                hljs.highlightElement(el);
+            });
+        }
+        </script>
+    </div>
+</div>
+{% endblock %}

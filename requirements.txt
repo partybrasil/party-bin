@@ -1,0 +1,10 @@
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+Flask-Bcrypt
+Flask-Session
+Pygments
+python-dotenv
+qrcode
+itsdangerous
+requests

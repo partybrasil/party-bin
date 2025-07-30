@@ -1,0 +1,17 @@
+body {
+    transition: background 0.5s, color 0.5s;
+}
+.codehilite {
+    border-radius: 0.5rem;
+    background: #222 !important;
+    color: #fff !important;
+    padding: 1em;
+    font-size: 1em;
+    overflow-x: auto;
+    margin: 1em 0;
+    animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

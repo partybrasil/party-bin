@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}{{ paste.title or 'Paste' }} | party-bin{% endblock %}
+{% block content %}
+<div class="card w-full max-w-2xl mx-auto bg-base-100 shadow-xl animate__animated animate__fadeIn">
+    <div class="card-body">
+        <h2 class="card-title text-2xl mb-2">{{ paste.title or 'Paste' }} <span class="badge badge-info ml-2">{{ paste.language or 'auto' }}</span></h2>
+        <div class="mb-2 text-sm text-gray-400 flex flex-wrap gap-2">
+            <span>🔗 <b>URL:</b> <code>{{ request.url }}</code></span>
+            <span>👁️ <b>Vistas:</b> {{ paste.views }}</span>
+            <span>⏰ <b>Creado:</b> {{ paste.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            {% if paste.expires_at %}<span>💣 <b>Expira:</b> {{ paste.expires_at.strftime('%Y-%m-%d %H:%M') }}</span>{% endif %}
+            {% if paste.author %}<span>✍️ <b>Firma:</b> {{ paste.author }}</span>{% endif %}
+            {% if paste.tags %}<span>🏷️ <b>Tags:</b> {{ paste.tags }}</span>{% endif %}
+        </div>
+        <div class="prose max-w-none animate__animated animate__fadeInUp">
+            {{ paste.content|safe }}
+        </div>
+        <div class="mt-4 animate__animated animate__fadeInUp">
+            {% if paste.content and 'img' in paste.content %}
+                <div class="divider">Imágenes detectadas</div>
+                <div class="flex flex-wrap gap-4">
+                {% for img in paste.content.split('<img') if 'src=' in img %}
+                    {% set src = img.split('src="')[1].split('"')[0] if 'src="' in img else None %}
+                    {% if src %}
+                        <img src="{{ src }}" class="rounded-lg shadow-lg my-2 max-w-xs h-auto animate__animated animate__pulse animate__infinite" alt="img" />
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="flex flex-wrap gap-2 mt-4">
+            <a href="/raw/{{ paste.url }}" class="btn btn-outline btn-sm animate__animated animate__fadeInLeft">Raw</a>
+            <a href="/export/txt/{{ paste.url }}" class="btn btn-outline btn-sm animate__animated animate__fadeInLeft">.txt</a>
+            <a href="/export/md/{{ paste.url }}" class="btn btn-outline btn-sm animate__animated animate__fadeInLeft">.md</a>
+            <a href="/export/html/{{ paste.url }}" class="btn btn-outline btn-sm animate__animated animate__fadeInLeft">.html</a>
+            <button class="btn btn-outline btn-sm animate__animated animate__fadeInLeft" onclick="copyToClipboard()">Copiar</button>
+            <a href="/qr/{{ paste.url }}" class="btn btn-outline btn-sm animate__animated animate__fadeInLeft">QR</a>
+        </div>
+    </div>
+</div>
+<script>
+function copyToClipboard() {
+    navigator.clipboard.writeText(document.querySelector('.prose').innerText);
+    showToast('📋 Copiado al portapapeles');
+}
+</script>
+{% endblock %}

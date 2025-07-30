@@ -41,5 +41,33 @@ A partir de la descripción completa allí incluida, **genera la estructura de c
 Gracias, Copilot.
 """
 
-# Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+
+from flask import Flask
+from config import Config
+from models import db, bcrypt
+from routes.pastes import pastes_bp
+from routes.auth import auth_bp
+from routes.dashboard import dashboard_bp
+import os
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+db.init_app(app)
+bcrypt.init_app(app)
+
+app.register_blueprint(pastes_bp)
+app.register_blueprint(auth_bp)
+app.register_blueprint(dashboard_bp)
+
+@app.before_request
+def create_tables():
+	if not hasattr(app, '_tables_created'):
+		db.create_all()
+		app._tables_created = True
+
+if __name__ == '__main__':
+	port = int(os.environ.get('PORT', 5000))
+	print(f"\n * PartyBin corriendo en: http://127.0.0.1:{port} (o http://localhost:{port})\n   Presiona CTRL+C para detener el servidor.\n")
+	app.run(debug=True, host='0.0.0.0', port=port)
 
