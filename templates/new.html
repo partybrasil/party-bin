@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Paste · party-bin{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10">
+    <div class="card shadow-lg animate__animated animate__fadeIn">
+      <div class="card-header bg-primary text-white d-flex align-items-center">
+        <i class="bi bi-plus-circle me-2"></i> Crear nuevo paste
+      </div>
+      <div class="card-body">
+  <form method="post" action="{{ url_for('pastes.new_paste') }}" autocomplete="off">
+          <div class="mb-3">
+            <label for="title" class="form-label">Título <span class="text-muted">(opcional)</span></label>
+            <input type="text" class="form-control" id="title" name="title" maxlength="100">
+          </div>
+          <div class="mb-3">
+            <label for="url_id" class="form-label">URL personalizada <span class="text-muted">(opcional, solo letras/números)</span></label>
+            <input type="text" class="form-control" id="url_id" name="url_id" maxlength="32" pattern="[a-zA-Z0-9_-]+">
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="private" name="private">
+            <label class="form-check-label" for="private">Privatizar (requiere contraseña para ver y editar)</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="public" name="public">
+            <label class="form-check-label" for="public">Público (editable por cualquiera, sin contraseña)</label>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña (opcional)</label>
+            <input type="password" class="form-control" id="password" name="password">
+            <div class="form-text">Si privatizas, debes definir una contraseña. Si marcas como público, no debe haber contraseña.</div>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Contenido</label>
+            <textarea class="form-control" id="content" name="content" rows="12" required placeholder="Pega tu texto, código o Markdown aquí..."></textarea>
+            <div class="form-text">
+              Palabras: <span id="wordCount">0</span> · Caracteres: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="lang" class="form-label">Lenguaje <span class="text-muted">(opcional, autodetecta si se deja vacío)</span></label>
+            <input type="text" class="form-control" id="lang" name="lang" placeholder="python, js, html, ...">
+          </div>
+          <div class="mb-3">
+            <label for="tags" class="form-label">Tags <span class="text-muted">(separados por coma)</span></label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="snippet, ejemplo, ...">
+          </div>
+          <div class="mb-3">
+            <label for="author" class="form-label">Firma <span class="text-muted">(alias opcional)</span></label>
+            <input type="text" class="form-control" id="author" name="author" maxlength="32">
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success btn-lg animate__animated animate__pulse animate__infinite"><i class="bi bi-send"></i> Guardar Paste</button>
+          </div>
+  </form>
+  <script src="/static/js/count.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

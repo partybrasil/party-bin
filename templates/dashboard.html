@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · party-bin{% endblock %}
+{% block content %}
+<div class="container py-4 animate__animated animate__fadeIn">
+  <div class="admin-toolbar d-flex flex-wrap align-items-center mb-4 gap-3">
+    <h2 class="party-accent me-3"><i class="bi bi-kanban"></i> Dashboard</h2>
+    <span class="badge bg-primary ms-2">Admin</span>
+    <button class="btn btn-danger btn-sm ms-2" onclick="deleteSelected()"><i class="bi bi-trash"></i> Borrar seleccionados</button>
+    <button class="btn btn-secondary btn-sm ms-2" onclick="showToast('Función no implementada','warning')"><i class="bi bi-arrow-clockwise"></i> Restaurar</button>
+    <button class="btn btn-success btn-sm ms-2" onclick="showToast('Función no implementada','info')"><i class="bi bi-download"></i> Exportar ZIP</button>
+    <button class="btn btn-info btn-sm ms-2" onclick="showToast('Función no implementada','info')"><i class="bi bi-lock"></i> Bloquear</button>
+    <button class="btn btn-dark btn-sm ms-2" onclick="showToast('Función no implementada','info')"><i class="bi bi-palette"></i> Cambiar tema global</button>
+    <div class="ms-auto d-flex gap-2">
+      <input id="searchQ" type="text" class="form-control form-control-sm" placeholder="Buscar...">
+      <input id="searchTag" type="text" class="form-control form-control-sm" placeholder="Tag">
+      <input id="searchAuthor" type="text" class="form-control form-control-sm" placeholder="Autor">
+      <select id="searchType" class="form-select form-select-sm">
+        <option value="">Tipo</option>
+        <option value="privado">Privado</option>
+        <option value="publico">Público</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="filterDashboard()"><i class="bi bi-funnel"></i></button>
+    </div>
+  </div>
+  <div class="mb-3">
+    <span class="badge bg-info paste-badge" data-bs-toggle="tooltip" title="Total de pastes">Total: {{ pastes|length }}</span>
+    <span class="badge bg-success paste-badge" data-bs-toggle="tooltip" title="Pastes públicos">Públicos: {{ pastes|selectattr('public')|list|length }}</span>
+    <span class="badge bg-danger paste-badge" data-bs-toggle="tooltip" title="Pastes privados">Privados: {{ pastes|selectattr('private')|list|length }}</span>
+    <span class="badge bg-warning paste-badge" data-bs-toggle="tooltip" title="Vistas totales">Vistas: {{ pastes|map(attribute='views')|sum }}</span>
+  </div>
+  <div class="row g-3">
+    {% for paste in pastes %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow border-0 animate__animated animate__fadeInUp">
+        <div class="card-header bg-gradient bg-info text-white d-flex align-items-center">
+          <input type="checkbox" class="form-check-input paste-check me-2" value="{{ paste.url_id }}">
+          <i class="bi bi-file-earmark-code me-2"></i> {{ paste.title or paste.url_id }}
+          <span class="ms-auto small"><i class="bi bi-calendar"></i> {{ paste.created[:19].replace('T',' ') }}</span>
+        </div>
+        <div class="card-body">
+          <div class="mb-2">
+            <span class="badge bg-secondary me-2"><i class="bi bi-person"></i> {{ paste.author or 'Anónimo' }}</span>
+            {% for tag in paste.tags %}
+              <span class="badge bg-warning text-dark me-1"><i class="bi bi-tag"></i> {{ tag }}</span>
+            {% endfor %}
+          </div>
+          <div class="mb-2">
+            <span class="badge bg-light text-dark">Vistas: {{ paste.views }}</span>
+            {% if paste.private %}<span class="badge bg-danger ms-1">Privado</span>{% endif %}
+            {% if paste.public %}<span class="badge bg-success ms-1">Público</span>{% endif %}
+          </div>
+          <div class="d-flex gap-2 mt-2">
+            <a href="/{{ paste.url_id }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Ver</a>
+            <a href="/edit/{{ paste.url_id }}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i> Editar</a>
+            <a href="/delete/{{ paste.url_id }}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Borrar</a>
+            <button class="btn btn-sm btn-outline-info" onclick="showToast('Edición rápida no implementada','info')"><i class="bi bi-lightning"></i> Editar rápido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

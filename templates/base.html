@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}party-bin · Pastebin Moderno{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/partybin.css">
+    <link rel="stylesheet" href="/static/css/themes.css">
+    <link rel="stylesheet" href="/static/css/partybin.anim.css">
+    <link rel="stylesheet" href="/static/css/partybin.widgets.css">
+    <link rel="stylesheet" href="/static/css/partybin.admin.css">
+    <link rel="stylesheet" href="/static/css/partybin.advanced.css">
+    {% block extra_head %}{% endblock %}
+    <style>
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+            transition: background 0.5s;
+        }
+        .party-accent {
+            animation: accent-cycle 8s infinite linear;
+        }
+        @keyframes accent-cycle {
+            0% { color: #0d6efd; }
+            20% { color: #6610f2; }
+            40% { color: #d63384; }
+            60% { color: #fd7e14; }
+            80% { color: #20c997; }
+            100% { color: #0d6efd; }
+        }
+        .theme-selector {
+            min-width: 120px;
+            border-radius: 1em;
+            border: 2px solid #eee;
+            background: #fff8;
+            font-size: 1em;
+            margin-left: 1em;
+            transition: box-shadow 0.3s;
+        }
+        .theme-selector:focus {
+            box-shadow: 0 0 0 0.2rem #0d6efd44;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 animate__animated animate__fadeInDown">
+    <div class="container-fluid">
+        <a class="navbar-brand party-accent fw-bold" href="/">
+            <i class="bi bi-emoji-laughing"></i> party-bin
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/new"><i class="bi bi-plus-circle"></i> Nuevo Paste</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dashboard"><i class="bi bi-kanban"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://rentry.co" target="_blank"><i class="bi bi-link-45deg"></i> Rentry</a></li>
+                <li class="nav-item d-flex align-items-center ms-3">
+                  <select class="theme-selector" id="themeSelector" title="Cambiar tema">
+                    <option value="light">🌞 Claro</option>
+                    <option value="dark">🌚 Oscuro</option>
+                    <option value="hacker">💻 Hacker</option>
+                    <option value="monokai">🦎 Monokai</option>
+                    <option value="dracula">🧛 Dracula</option>
+                    <option value="solarized">🌅 Solarized</option>
+                    <option value="nord">❄️ Nord</option>
+                    <option value="gruvbox">🎨 Gruvbox</option>
+                    <option value="pastel">🧁 Pastel</option>
+                    <option value="party">🎉 Party</option>
+                    <option value="classic">📄 Clásico</option>
+                  </select>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container animate__animated animate__fadeInUp">
+    {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/partybin.js"></script>
+<script src="/static/js/partybin.widgets.js"></script>
+<script src="/static/js/partybin.admin.js"></script>
+<script src="/static/js/partybin.advanced.js"></script>
+<script>
+// Animación de cambio de tema
+const themeSelector = document.getElementById('themeSelector');
+if (themeSelector) {
+    themeSelector.value = document.documentElement.getAttribute('data-bs-theme') || 'light';
+    themeSelector.addEventListener('change', function() {
+        document.documentElement.setAttribute('data-bs-theme', this.value);
+        localStorage.setItem('partybin-theme', this.value);
+        document.body.classList.add('animate__flash');
+        setTimeout(()=>document.body.classList.remove('animate__flash'), 800);
+        showToast('Tema cambiado', 'info');
+    });
+    // Cargar tema guardado
+    const saved = localStorage.getItem('partybin-theme');
+    if (saved) {
+        document.documentElement.setAttribute('data-bs-theme', saved);
+        themeSelector.value = saved;
+    }
+}
+</script>
+<div id="toast-container" style="position:fixed;top:1em;right:1em;z-index:9999;"></div>
+<div id="modal-container"></div>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

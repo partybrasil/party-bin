@@ -41,5 +41,33 @@ A partir de la descripción completa allí incluida, **genera la estructura de c
 Gracias, Copilot.
 """
 
-# Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+
+from flask import Flask, render_template
+from config import Config
+from routes.pastes import pastes_bp
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+# Registrar blueprint de pastes
+app.register_blueprint(pastes_bp)
+
+@app.route('/')
+def index():
+    # Se puede pasar el tema actual a la plantilla
+    theme = app.config.get('DEFAULT_THEME', 'light')
+    return render_template('index.html', theme=theme)
+
+import re
+
+# Filtro custom para regex en Jinja2
+@app.template_filter('re_search')
+def re_search_filter(value, pattern):
+    try:
+        return re.search(pattern, value) is not None
+    except Exception:
+        return False
+
+if __name__ == '__main__':
+    app.run(debug=True)
 

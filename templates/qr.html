@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}QR · party-bin{% endblock %}
+{% block content %}
+<div class="container py-4 animate__animated animate__fadeIn text-center">
+  <h3 class="mb-4">Compartir paste por QR</h3>
+  <div class="d-flex justify-content-center">
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code" class="shadow-lg rounded animate__animated animate__pulse animate__infinite" style="width: 256px; height: 256px;">
+  </div>
+  <div class="mt-4">
+    <a href="/{{ paste.url_id }}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Volver</a>
+    <a href="/raw/{{ paste.url_id }}" class="btn btn-outline-secondary ms-2"><i class="bi bi-file-earmark-text"></i> Raw</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+/* Animaciones y transiciones extra para party-bin */
+.card, .modal-content, .toast { transition: box-shadow 0.4s, transform 0.4s; }
+.card:hover { box-shadow: 0 0 2rem #0d6efd33; transform: scale(1.02); }
+.btn, .form-control, .badge { transition: background 0.3s, color 0.3s, box-shadow 0.3s; }
+.btn:hover, .form-control:focus { box-shadow: 0 0 0 0.2rem #6610f244; }
+.badge { cursor: pointer; }
+.toast { opacity: 0.98; }

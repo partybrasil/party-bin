@@ -1,0 +1,12 @@
+/* Temas visuales para party-bin */
+[data-bs-theme="light"] { --bs-body-bg: #f8fafc; --bs-body-color: #222; }
+[data-bs-theme="dark"] { --bs-body-bg: #181a1b; --bs-body-color: #f8fafc; }
+[data-bs-theme="hacker"] { --bs-body-bg: #101c14; --bs-body-color: #39ff14; }
+[data-bs-theme="monokai"] { --bs-body-bg: #272822; --bs-body-color: #f8f8f2; }
+[data-bs-theme="dracula"] { --bs-body-bg: #282a36; --bs-body-color: #f8f8f2; }
+[data-bs-theme="solarized"] { --bs-body-bg: #fdf6e3; --bs-body-color: #657b83; }
+[data-bs-theme="nord"] { --bs-body-bg: #2e3440; --bs-body-color: #d8dee9; }
+[data-bs-theme="gruvbox"] { --bs-body-bg: #282828; --bs-body-color: #ebdbb2; }
+[data-bs-theme="pastel"] { --bs-body-bg: #ffe4ec; --bs-body-color: #5a5a5a; }
+[data-bs-theme="party"] { --bs-body-bg: linear-gradient(135deg,#f8fafc,#e0e7ef,#ffe4ec,#d1f7c4,#c4e1f7); --bs-body-color: #222; }
+[data-bs-theme="classic"] { --bs-body-bg: #fff; --bs-body-color: #222; }

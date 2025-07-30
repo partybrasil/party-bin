@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ paste.title or 'Paste' }} · party-bin{% endblock %}
+{% block extra_head %}
+  <style>{{ css|safe }}</style>
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10 col-md-12">
+    <div class="card shadow-lg animate__animated animate__fadeIn">
+      <div class="card-header bg-info text-white d-flex align-items-center">
+        <i class="bi bi-file-earmark-code me-2"></i> {{ paste.title or 'Paste' }}
+        <span class="ms-auto small text-end"><i class="bi bi-calendar"></i> {{ paste.created[:19].replace('T',' ') }}</span>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <span class="badge bg-secondary me-2"><i class="bi bi-person"></i> {{ paste.author or 'Anónimo' }}</span>
+          {% for tag in paste.tags %}
+            <span class="badge bg-warning text-dark me-1"><i class="bi bi-tag"></i> {{ tag }}</span>
+          {% endfor %}
+        </div>
+        <div class="mb-4">
+          {% if paste.expire_at %}
+            <div class="alert alert-warning d-flex align-items-center mb-3 animate__animated animate__pulse animate__infinite">
+              <i class="bi bi-hourglass-split me-2"></i>
+              Expira en: <span id="countdown"></span>
+            </div>
+            <script>startCountdown("{{ paste.expire_at }}")</script>
+          {% endif %}
+          <div class="codehilite rounded-3 p-3 bg-light border animate__animated animate__fadeInUp" style="overflow-x:auto;">
+            {{ highlighted|safe }}
+          </div>
+          {% if paste.content|length < 100000 and (paste.content|re_search('^data:image/') or paste.content|re_search('^https?://i.imgur.com/')) %}
+            <div class="text-center my-3">
+              <img src="{{ paste.content }}" alt="Imagen incrustada" class="img-fluid rounded shadow animate__animated animate__zoomIn">
+            </div>
+          {% endif %}
+        </div>
+        <a href="/" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Volver</a>
+        <a href="/raw/{{ paste.url_id }}" class="btn btn-outline-secondary ms-2"><i class="bi bi-file-earmark-text"></i> Raw</a>
+        <a href="/export/{{ paste.url_id }}?fmt=txt" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> .txt</a>
+        <a href="/export/{{ paste.url_id }}?fmt=md" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> .md</a>
+        <a href="/export/{{ paste.url_id }}?fmt=html" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> .html</a>
+        <a href="/qr/{{ paste.url_id }}" class="btn btn-outline-info ms-2"><i class="bi bi-qr-code"></i> QR</a>
+        <button class="btn btn-outline-dark ms-2" onclick="showToast('Enlace solo lectura generado','info');">Solo lectura</button>
+        <button class="btn btn-outline-warning ms-2" onclick="notify('¡Alguien ha visto tu paste!')"><i class="bi bi-bell"></i> Notificar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

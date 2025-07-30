@@ -1,0 +1,8 @@
+/* partybin.css: estilos custom para party-bin */
+body {
+    /* Se puede sobreescribir desde los temas */
+}
+.party-accent {
+    font-weight: bold;
+    letter-spacing: 1px;
+}

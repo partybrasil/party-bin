@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paste · party-bin{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10">
+    <div class="card shadow-lg animate__animated animate__fadeIn">
+      <div class="card-header bg-warning text-dark d-flex align-items-center">
+        <i class="bi bi-pencil-square me-2"></i> Editar paste
+      </div>
+      <div class="card-body">
+  <form method="post" action="{{ url_for('pastes.edit_paste', url_id=paste.url_id) }}" autocomplete="off">
+          <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
+            <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ paste.title }}">
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Contenido</label>
+            <textarea class="form-control" id="content" name="content" rows="12" required>{{ paste.content }}</textarea>
+            <div class="form-text">
+              Palabras: <span id="wordCount">0</span> · Caracteres: <span id="charCount">0</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="lang" class="form-label">Lenguaje</label>
+            <input type="text" class="form-control" id="lang" name="lang" value="{{ paste.lang }}">
+          </div>
+          <div class="mb-3">
+            <label for="tags" class="form-label">Tags</label>
+            <input type="text" class="form-control" id="tags" name="tags" value= "{{ paste.tags|join(',') }}">
+          </div>
+          <div class="mb-3">
+            <label for="author" class="form-label">Firma</label>
+            <input type="text" class="form-control" id="author" name="author" maxlength="32" value="{{ paste.author }}">
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="private" name="private" {% if paste.private %}checked{% endif %}>
+            <label class="form-check-label" for="private">Privatizar (requiere contraseña para ver y editar)</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="public" name="public" {% if paste.public %}checked{% endif %}>
+            <label class="form-check-label" for="public">Público (editable por cualquiera, sin contraseña)</label>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña (opcional)</label>
+            <input type="password" class="form-control" id="password" name="password" value="">
+            <div class="form-text">Si privatizas, debes definir una contraseña. Si marcas como público, no debe haber contraseña.</div>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success btn-lg animate__animated animate__pulse animate__infinite"><i class="bi bi-save"></i> Guardar Cambios</button>
+          </div>
+  </form>
+  <script src="/static/js/count.js"></script>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

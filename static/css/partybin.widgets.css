@@ -1,0 +1,4 @@
+/* Widgets visuales party-bin */
+.paste-badge { font-size: 0.95em; margin-right: 0.3em; }
+.paste-badge[data-bs-toggle="tooltip"] { text-decoration: underline dotted; cursor: help; }
+.paste-badge[data-bs-toggle="popover"] { cursor: pointer; }

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Raw · party-bin{% endblock %}
+{% block content %}
+<div class="container py-4 animate__animated animate__fadeIn">
+  <div class="mb-3">
+    <a href="/{{ paste.url_id }}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Volver</a>
+    <button class="btn btn-outline-secondary ms-2" onclick="navigator.clipboard.writeText(document.getElementById('rawContent').textContent);this.textContent='¡Copiado!';"><i class="bi bi-clipboard"></i> Copiar</button>
+    <a href="/export/{{ paste.url_id }}?fmt=txt" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> Descargar .txt</a>
+    <a href="/export/{{ paste.url_id }}?fmt=md" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> Descargar .md</a>
+    <a href="/export/{{ paste.url_id }}?fmt=html" class="btn btn-outline-success ms-2"><i class="bi bi-download"></i> Descargar .html</a>
+    <a href="/qr/{{ paste.url_id }}" class="btn btn-outline-info ms-2"><i class="bi bi-qr-code"></i> QR</a>
+  </div>
+  <pre id="rawContent" class="bg-light p-3 rounded border">{{ paste.content }}</pre>
+</div>
+{% endblock %}
