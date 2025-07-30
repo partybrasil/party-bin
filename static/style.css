@@ -1,0 +1,313 @@
+/* CSS base para PartyBin */
+body {
+	font-family: 'Segoe UI', 'Fira Sans', Arial, sans-serif;
+	background: var(--bg, #f8f8f8);
+	color: var(--fg, #222);
+	margin: 0;
+	min-height: 100vh;
+	transition: background 0.5s, color 0.5s;
+}
+
+header {
+	background: var(--header-bg, #fffbe7);
+	color: var(--header-fg, #222);
+	padding: 1.5em 0 1em 0;
+	text-align: center;
+	box-shadow: 0 2px 8px #0001;
+	font-size: 2.2em;
+	letter-spacing: 1px;
+	transition: background 0.5s, color 0.5s;
+}
+header h1 {
+	margin: 0;
+	font-weight: 900;
+	letter-spacing: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+}
+header h1::before {
+	content: '🥳';
+	font-size: 1.2em;
+	margin-right: 0.2em;
+}
+
+main {
+	max-width: 700px;
+	margin: 2em auto 2em auto;
+	background: var(--main-bg, #fff);
+	border-radius: 1.2em;
+	box-shadow: 0 4px 32px #0002;
+	padding: 2em 2.5em;
+	animation: fadein 0.7s;
+	min-height: 60vh;
+}
+
+@keyframes fadein {
+	from { opacity: 0; transform: translateY(30px); }
+	to { opacity: 1; transform: none; }
+}
+@keyframes pop {
+	0% { transform: scale(0.8); opacity: 0; }
+	60% { transform: scale(1.05); opacity: 1; }
+	100% { transform: scale(1); }
+}
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	20%, 60% { transform: translateX(-8px); }
+	40%, 80% { transform: translateX(8px); }
+}
+
+form, .paste-content, .toast, .theme-switcher, #password-modal > div {
+	animation: fadein 0.7s;
+}
+
+button, .theme-switcher button, a[title], .dashboard-btn {
+	transition: background 0.3s, color 0.3s, box-shadow 0.2s, transform 0.15s;
+}
+button:active, .theme-switcher button:active, .dashboard-btn:active {
+	transform: scale(0.97);
+}
+button:focus-visible, .theme-switcher button:focus-visible {
+	outline: 2px solid #ffe066;
+	box-shadow: 0 0 0 3px #ffe06655;
+}
+
+ul#dashboard-list li {
+	background: #fffbe7;
+	border-radius: 0.7em;
+	margin-bottom: 0.7em;
+	padding: 0.7em 1em;
+	box-shadow: 0 2px 8px #0001;
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+	position: relative;
+}
+ul#dashboard-list li:hover {
+	background: #ffe066;
+	box-shadow: 0 4px 16px #0002;
+	transform: translateY(-2px) scale(1.01);
+}
+ul#dashboard-list li a, ul#dashboard-list li button {
+	margin-left: 0.3em;
+	font-size: 1.1em;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #6c63ff;
+	transition: color 0.2s, transform 0.2s;
+}
+ul#dashboard-list li a:hover, ul#dashboard-list li button:hover {
+	color: #222;
+	transform: scale(1.2) rotate(-8deg);
+}
+
+#password-modal {
+	display: none;
+	position: fixed;
+	top: 0; left: 0; width: 100vw; height: 100vh;
+	background: #0008;
+	z-index: 9999;
+	align-items: center;
+	justify-content: center;
+	animation: fadein 0.4s;
+}
+#password-modal.show {
+	display: flex;
+}
+#password-modal > div {
+	background: #fff;
+	padding: 2em 2em 1em 2em;
+	border-radius: 1em;
+	box-shadow: 0 4px 32px #0005;
+	min-width: 300px;
+	animation: pop 0.5s;
+	position: relative;
+}
+#password-modal input[type="password"] {
+	font-size: 1.1em;
+	padding: 0.6em 1em;
+	border-radius: 0.5em;
+	border: 1.5px solid #ffe066;
+	margin-bottom: 1em;
+	width: 100%;
+	transition: border 0.2s, box-shadow 0.2s;
+}
+#password-modal input[type="password"]:focus {
+	border: 2px solid #6c63ff;
+	box-shadow: 0 0 0 2px #6c63ff33;
+}
+#modal-error {
+	color: #c00;
+	font-weight: bold;
+	min-height: 1.2em;
+	animation: shake 0.4s;
+}
+
+.toast {
+	animation: fadein 0.7s, pop 0.5s;
+	transition: opacity 0.5s, transform 0.5s, background 0.3s, color 0.3s;
+	font-weight: bold;
+	border: 2px solid #ffe066;
+}
+.toast.show {
+	opacity: 1;
+	pointer-events: auto;
+	transform: none;
+	background: #ffe066;
+	color: #222;
+	box-shadow: 0 8px 32px #0004;
+}
+
+footer {
+	text-align: center;
+	color: #888;
+	padding: 1.5em 0 1em 0;
+	font-size: 1em;
+	background: none;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.1em;
+	margin-bottom: 1.5em;
+}
+form label {
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+}
+input, textarea, select, button {
+	font-family: inherit;
+	font-size: 1em;
+	border-radius: 0.5em;
+	border: 1px solid #ccc;
+	padding: 0.5em 0.8em;
+	transition: border 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus, select:focus {
+	border: 1.5px solid #6c63ff;
+	outline: none;
+	box-shadow: 0 0 0 2px #6c63ff33;
+}
+button {
+	background: linear-gradient(90deg, #ffe066 0%, #6c63ff 100%);
+	color: #222;
+	font-weight: bold;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 2px 8px #0001;
+	transition: background 0.3s, transform 0.1s;
+	margin-top: 0.5em;
+}
+button:hover {
+	background: linear-gradient(90deg, #6c63ff 0%, #ffe066 100%);
+	transform: scale(1.04);
+}
+
+.meta {
+	color: #888;
+	font-size: 0.95em;
+	margin-bottom: 1em;
+	display: flex;
+	gap: 1.5em;
+	align-items: center;
+}
+.meta span {
+	display: flex;
+	align-items: center;
+	gap: 0.3em;
+}
+.meta span::before {
+	content: '🕒';
+	font-size: 1em;
+	margin-right: 0.2em;
+}
+.meta span:nth-child(2)::before { content: '👁️'; }
+.meta span:nth-child(3)::before { content: '🏷️'; }
+
+.paste-content {
+	background: #f7f7fa;
+	border-radius: 0.7em;
+	padding: 1.2em 1em;
+	font-size: 1.1em;
+	margin-bottom: 1.5em;
+	box-shadow: 0 2px 8px #0001;
+	transition: background 0.3s;
+	word-break: break-word;
+}
+.paste-content pre {
+	background: #232323;
+	color: #a6e22e;
+	border-radius: 0.5em;
+	padding: 1em;
+	overflow-x: auto;
+	font-size: 1em;
+	margin: 1em 0;
+	transition: background 0.3s;
+}
+.paste-content code {
+	font-family: 'Fira Mono', 'Consolas', monospace;
+	font-size: 1em;
+}
+.paste-content img {
+	border-radius: 0.5em;
+	box-shadow: 0 2px 8px #0002;
+	margin: 1em auto;
+	display: block;
+	max-width: 100%;
+	animation: fadein 0.7s;
+}
+
+.toast {
+	position: fixed;
+	top: 2em;
+	right: 2em;
+	background: #ffe066;
+	color: #222;
+	padding: 1em 2em;
+	border-radius: 1em;
+	box-shadow: 0 4px 32px #0003;
+	font-size: 1.1em;
+	z-index: 9999;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-30px);
+	transition: opacity 0.5s, transform 0.5s;
+}
+.toast.show {
+	opacity: 1;
+	pointer-events: auto;
+	transform: none;
+}
+
+.theme-switcher {
+	position: fixed;
+	bottom: 2em;
+	right: 2em;
+	background: #fffbe7;
+	border-radius: 2em;
+	box-shadow: 0 2px 8px #0002;
+	padding: 0.5em 1.5em;
+	display: flex;
+	gap: 1em;
+	align-items: center;
+	z-index: 1000;
+	font-size: 1.1em;
+	animation: fadein 1s;
+}
+.theme-switcher button {
+	background: none;
+	border: none;
+	font-size: 1.2em;
+	cursor: pointer;
+	transition: transform 0.2s;
+}
+.theme-switcher button:hover {
+	transform: scale(1.2) rotate(-10deg);
+}

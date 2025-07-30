@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Paste - PartyBin{% endblock %}
+{% block content %}
+<h2>Crear nuevo paste</h2>
+<form method="post" action="/create">
+  <label>Título (opcional): <input type="text" name="title"></label><br>
+  <label>Contenido:<br>
+    <textarea id="content" name="content" rows="16" cols="80" required></textarea>
+    <div>
+      Palabras: <span id="wordcount">0</span> |
+      Caracteres: <span id="charcount">0</span>
+    </div>
+  </label><br>
+  <label>Lenguaje (opcional): <input type="text" name="language" placeholder="python, js, ..."></label><br>
+  <label>URL personalizada: <input type="text" name="custom_url"></label><br>
+  <label>Protección por contraseña: <input type="password" name="password"></label>
+  <label><input type="checkbox" name="privatize"> Proteger visualización y edición (privado)</label><br>
+  <label>Firma/Alias: <input type="text" name="author"></label><br>
+  <label>Tags: <input type="text" name="tags" placeholder="tag1, tag2"></label><br>
+  <label>Autodestrucción:
+    <select name="autodestruct">
+      <option value="none">Nunca</option>
+      <option value="time">Por tiempo</option>
+      <option value="views">Por vistas</option>
+      <option value="one">Un solo acceso</option>
+    </select>
+  </label><br>
+  <button type="submit">Crear Paste</button>
+</form>
+
+<div style="margin-top:2em;">
+  <button type="button" onclick="document.getElementById('preview-tab').style.display='block'">Vista previa</button>
+  <div id="preview-tab" style="display:none; border:1px solid #ccc; padding:1em; margin-top:1em;">
+    <h3>Vista previa</h3>
+    <div id="preview"></div>
+    <button type="button" onclick="this.parentNode.style.display='none'">Cerrar</button>
+  </div>
+</div>
+
+<script src="/static/js/preview.js"></script>
+{% endblock %}

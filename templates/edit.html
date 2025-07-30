@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Editar Paste - PartyBin{% endblock %}
+{% block content %}
+<h2>Editar paste</h2>
+<form method="post">
+  <label>Título: <input type="text" name="title" value="{{ paste.title }}"></label><br>
+  <label>Contenido:<br><textarea name="content" rows="16" cols="80">{{ paste.content }}</textarea></label><br>
+  <label>Lenguaje: <input type="text" name="language" value="{{ paste.language }}"></label><br>
+  <label>Firma/Alias: <input type="text" name="author" value="{{ paste.author }}"></label><br>
+  <label>Tags: <input type="text" name="tags" value="{{ paste.tags|join(', ') }}"></label><br>
+  <label><input type="checkbox" name="privatize" {% if paste.edit_code %}checked{% endif %}> Proteger solo edición con código (no requiere contraseña)</label><br>
+  <label>Nueva contraseña (dejar vacío para no cambiar): <input type="password" name="password"></label><br>
+  {% if paste.password %}
+    <div style="margin:1em 0; color:#888;">🔒 Este paste es privado. Solo la contraseña permite ver y editar.</div>
+  {% elif paste.edit_code %}
+    <div style="margin:1em 0; color:#888;">🔑 Código de edición: <b>{{ paste.edit_code }}</b></div>
+  {% else %}
+    <div style="margin:1em 0; color:#888;">🌍 Este paste es público. Cualquiera puede editarlo.</div>
+  {% endif %}
+  <button type="submit">Guardar cambios</button>
+</form>
+{% endblock %}

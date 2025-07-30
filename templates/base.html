@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}PartyBin{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link id="theme-link" rel="stylesheet" href="/static/themes/light.css">
+  <script src="/static/js/utils.js"></script>
+  <script>
+    // Theme switcher
+    function setTheme(theme) {
+      document.getElementById('theme-link').href = '/static/themes/' + theme + '.css';
+      localStorage.setItem('partybin-theme', theme);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const theme = localStorage.getItem('partybin-theme') || 'light';
+      setTheme(theme);
+    });
+  </script>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header><h1><a href="/">PartyBin</a></h1></header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="toast" class="toast"></div>
+        <script>
+          const toast = document.getElementById('toast');
+          {% for msg in messages %}
+            setTimeout(() => {
+              toast.textContent = {{ msg[1]|tojson }};
+              toast.classList.add('show');
+              setTimeout(() => toast.classList.remove('show'), 3500);
+            }, {{ loop.index0 }} * 4000);
+          {% endfor %}
+        </script>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer><small>PartyBin &copy; 2025</small></footer>
+
+  <div class="theme-switcher">
+    <span>🎨 Tema:</span>
+    <button onclick="setTheme('light')" title="Claro">🌞</button>
+    <button onclick="setTheme('dark')" title="Oscuro">🌙</button>
+    <button onclick="setTheme('hacker')" title="Hacker">💻</button>
+  </div>
+</body>
+</html>

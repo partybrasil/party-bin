@@ -1,0 +1,8 @@
+/* Tema oscuro */
+body {
+	--bg: #181818;
+	--fg: #eee;
+	--header-bg: #232323;
+	--header-fg: #ffe066;
+	--main-bg: #232323;
+}

@@ -1,0 +1,7 @@
+Flask
+markdown2
+Pygments
+python-slugify
+qrcode
+itsdangerous
+werkzeug

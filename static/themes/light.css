@@ -1,0 +1,8 @@
+/* Tema claro */
+body {
+	--bg: #fffbe7;
+	--fg: #222;
+	--header-bg: #fffbe7;
+	--header-fg: #222;
+	--main-bg: #fff;
+}

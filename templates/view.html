@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}{{ paste.title or 'Paste' }} - PartyBin{% endblock %}
+{% block content %}
+<h2>{{ paste.title or 'Paste' }}</h2>
+<div class="meta">
+  <span>Creado: {{ paste.created }}</span> |
+  <span>Vistas: {{ paste.views }}</span> |
+  <span>Tags: {{ paste.tags|join(', ') }}</span>
+</div>
+
+<div class="paste-content" id="paste-content">
+  {{ paste.html|safe }}
+</div>
+
+{% if show_content %}
+  <div class="actions-bar">
+    <button class="action-btn" onclick="copyToClipboard(document.getElementById('paste-content').innerText)">📋 Copiar</button>
+    <a class="action-btn" href="/edit/{{ paste.url }}{% if paste.edit_code %}?code={{ paste.edit_code }}{% endif %}" id="edit-btn">✏️ Editar</a>
+    <a class="action-btn" href="/raw/{{ paste.url }}">📝 Raw</a>
+    <a class="action-btn" href="/export/{{ paste.url }}?fmt=txt">⬇️ .txt</a>
+    <a class="action-btn" href="/export/{{ paste.url }}?fmt=md">⬇️ .md</a>
+    <a class="action-btn" href="/export/{{ paste.url }}?fmt=html">⬇️ .html</a>
+    <a class="action-btn" href="/qr/{{ paste.url }}" target="_blank">🔗 QR</a>
+  </div>
+{% elif paste.privatize and paste.password %}
+  <div class="actions-bar" style="text-align:center;margin:2em 0;">
+    <button class="unlock-btn" onclick="showPasswordModal()">🔒 Desbloquear para ver y usar acciones</button>
+  </div>
+{% endif %}
+<script src="/static/js/images.js"></script>
+
+<div id="password-modal" class="modal-float">
+  <div class="modal-content">
+    <h3 style="text-align:center;font-size:1.3em;">🔒 Contraseña requerida</h3>
+    <input type="password" id="modal-password" placeholder="Contraseña" class="modal-input">
+    <button class="modal-btn" onclick="submitPassword()">Acceder</button>
+    <button class="modal-btn cancel" onclick="closeModal()">Cancelar</button>
+    <div id="modal-error" class="modal-error"></div>
+  </div>
+</div>
+<style>
+.actions-bar { margin: 2em 0 1em 0; display: flex; flex-wrap: wrap; gap: 0.5em; justify-content: center; }
+.action-btn {
+  background: var(--accent, #222);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.1em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px #0001;
+}
+.action-btn:hover { background: var(--accent2, #444); transform: translateY(-2px) scale(1.04); }
+.unlock-btn {
+  background: linear-gradient(90deg, #ffb347, #ffcc33);
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 0.7em 2.2em;
+  box-shadow: 0 4px 16px #0002;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  margin: 1.5em auto;
+  display: inline-block;
+  letter-spacing: 0.03em;
+}
+.unlock-btn:hover { background: linear-gradient(90deg, #ffe066, #fffbe0); box-shadow: 0 6px 24px #0003; transform: scale(1.04); }
+.modal-float {
+  display: none;
+  position: fixed; z-index: 1000; left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.25); align-items: center; justify-content: center;
+}
+.modal-float.show { display: flex; }
+.modal-content {
+  background: #fff; color: #222; border-radius: 12px; padding: 2em 2.5em; box-shadow: 0 8px 32px #0003; min-width: 320px; max-width: 90vw;
+  display: flex; flex-direction: column; align-items: center;
+}
+.modal-input { margin: 1em 0; padding: 0.6em 1em; border-radius: 6px; border: 1px solid #ccc; font-size: 1.1em; width: 100%; }
+.modal-btn { background: #222; color: #fff; border: none; border-radius: 6px; padding: 0.5em 1.5em; margin: 0.3em; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+.modal-btn.cancel { background: #eee; color: #222; }
+.modal-btn:hover { background: #444; }
+.modal-error { color: #c00; margin-top: 0.5em; min-height: 1.2em; font-size: 1em; text-align: center; }
+@keyframes shake { 10%, 90% { transform: translateX(-2px); } 20%, 80% { transform: translateX(4px); } 30%, 50%, 70% { transform: translateX(-8px); } 40%, 60% { transform: translateX(8px); } }
+</style>
+<script>
+function showPasswordModal() {
+  document.getElementById('password-modal').classList.add('show');
+  document.getElementById('modal-password').value = '';
+  document.getElementById('modal-error').textContent = '';
+  setTimeout(()=>document.getElementById('modal-password').focus(), 100);
+}
+function closeModal() {
+  document.getElementById('password-modal').classList.remove('show');
+}
+function submitPassword() {
+  const pwd = document.getElementById('modal-password').value;
+  fetch('/auth/{{ paste.url }}', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    body: JSON.stringify({ password: pwd })
+  }).then(r => r.json()).then(data => {
+    if (data.success) location.reload();
+    else {
+      const err = document.getElementById('modal-error');
+      err.textContent = data.error || 'Contraseña incorrecta';
+      err.style.animation = 'shake 0.4s';
+      setTimeout(()=>err.style.animation='', 500);
+    }
+  });
+}
+</script>
+{% if not show_content and paste.privatize and paste.password %}
+<script>showPasswordModal();</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - PartyBin{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<div style="margin-bottom:1em;">
+  <input type="text" id="tag-filter" placeholder="Filtrar por tag..." style="padding:0.5em; border-radius:0.5em;">
+</div>
+<ul id="dashboard-list">
+  {% for paste in pastes %}
+    <li data-tags="{{ paste.tags|join(',') if paste.tags else '' }}">
+      <a href="/view/{{ paste.url }}">{{ paste.title or paste.url }}</a> ({{ paste.created }})
+      <a href="/edit/{{ paste.url }}" title="Editar">✏️</a>
+      <button onclick="deletePaste('{{ paste.url }}')" title="Borrar">🗑️</button>
+      <button onclick="copyToClipboard(window.location.origin + '/view/{{ paste.url }}')" title="Copiar enlace">🔗</button>
+      <a href="/qr/{{ paste.url }}" target="_blank" title="QR">📱</a>
+    </li>
+  {% endfor %}
+</ul>
+<script>
+function deletePaste(url) {
+  const code = prompt('Introduce el código de edición para borrar:');
+  if (!code) return;
+  fetch('/delete/' + url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'code=' + encodeURIComponent(code)
+  }).then(r => r.json()).then(data => {
+    if (data.success) location.reload();
+    else alert(data.error || 'Error al borrar');
+  });
+}
+document.getElementById('tag-filter').addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  document.querySelectorAll('#dashboard-list li').forEach(li => {
+    const tags = li.getAttribute('data-tags') || '';
+    li.style.display = tags.toLowerCase().includes(val) ? '' : 'none';
+  });
+});
+</script>
+{% endblock %}
