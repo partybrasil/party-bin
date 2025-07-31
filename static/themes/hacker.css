@@ -1,0 +1,5 @@
+body[data-theme="hacker"] {
+  --bs-body-bg: #181825;
+  --bs-body-color: #39ff14;
+  --accent: #39ff14;
+}

@@ -1,0 +1,5 @@
+body[data-theme="dark"] {
+  --bs-body-bg: #181825;
+  --bs-body-color: #f8fafc;
+  --accent: #ff4ecd;
+}

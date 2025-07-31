@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Inicio | PartyBin{% endblock %}
+{% block content %}
+<div class="container py-5 animate__animated animate__fadeInDown animate__slower">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-3 fw-bold mb-3 text-accent">🥳 PartyBin</h1>
+            <p class="lead mb-4">Tu pastebin privado, seguro y ultra estilizado.<br>Markdown, código, autodestrucción, temas, QR, dashboard y más.</p>
+            <a href="/create" class="btn btn-lg btn-accent animate__animated animate__pulse animate__infinite">¡Crear un paste!</a>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="/static/img/banner.gif" alt="Banner animado" class="img-fluid rounded-4 shadow-lg animate__animated animate__zoomIn animate__slower">
+        </div>
+    </div>
+    <div class="row mt-5 g-4">
+        <div class="col-6 col-md-3">
+            <div class="card text-center animate__animated animate__bounceIn">
+                <div class="card-body">
+                    <i class="fas fa-lock fa-2x text-accent mb-2"></i>
+                    <h5 class="card-title">Privacidad</h5>
+                    <p class="card-text">Protege tus pastes con contraseña y código de edición.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center animate__animated animate__bounceIn">
+                <div class="card-body">
+                    <i class="fas fa-code fa-2x text-accent mb-2"></i>
+                    <h5 class="card-title">Markdown + Código</h5>
+                    <p class="card-text">Soporte avanzado para Markdown y resaltado de sintaxis.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center animate__animated animate__bounceIn">
+                <div class="card-body">
+                    <i class="fas fa-bolt fa-2x text-accent mb-2"></i>
+                    <h5 class="card-title">Autodestrucción</h5>
+                    <p class="card-text">Expira por tiempo, fecha o número de vistas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card text-center animate__animated animate__bounceIn">
+                <div class="card-body">
+                    <i class="fas fa-qrcode fa-2x text-accent mb-2"></i>
+                    <h5 class="card-title">QR y Exportar</h5>
+                    <p class="card-text">Descarga, copia o comparte tus pastes con QR.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

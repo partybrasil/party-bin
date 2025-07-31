@@ -1,0 +1,7 @@
+Flask
+Flask-Login
+Flask-Migrate
+psycopg2-binary
+Jinja2
+Werkzeug
+prismjs

@@ -41,5 +41,35 @@ A partir de la descripción completa allí incluida, **genera la estructura de c
 Gracias, Copilot.
 """
 
-# Comienza por definir la estructura inicial de Flask con los primeros endpoints y funciones clave.
+
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from models import db
+from routes.pastes import pastes_bp
+from routes.dashboard import dashboard_bp
+from routes.auth import auth_bp
+import os
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'partybin-secret')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///partybin.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+login_manager = LoginManager(app)
+migrate = Migrate(app, db)
+
+# Blueprints
+app.register_blueprint(pastes_bp)
+app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
+app.register_blueprint(auth_bp, url_prefix='/auth')
+
+@app.route('/')
+def home():
+	return render_template('home.html')
+
+if __name__ == '__main__':
+	app.run(debug=True)
 

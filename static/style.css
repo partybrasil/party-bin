@@ -1,0 +1,35 @@
+body {
+  transition: background 0.5s;
+}
+.text-accent {
+  color: #ff4ecd !important;
+}
+.bg-gradient {
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+}
+.btn-accent {
+  background: #ff4ecd;
+  color: #fff;
+  border: none;
+}
+.btn-accent:hover {
+  background: #d726a7;
+}
+.sidebar {
+  min-width: 220px;
+  max-width: 220px;
+  transition: all 0.3s cubic-bezier(.4,2,.6,1);
+}
+.sidebar.collapsed {
+  min-width: 60px;
+  max-width: 60px;
+}
+.sidebar-label {
+  transition: opacity 0.3s;
+}
+.sidebar.collapsed .sidebar-label {
+  opacity: 0;
+  width: 0;
+  display: none;
+}
+.animate__animated { animation-duration: 1s; }

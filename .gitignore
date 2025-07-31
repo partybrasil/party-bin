@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+instance/
+.webassets-cache
+.env
+.venv
+*.db
+*.sqlite3
+migrations/
+static/img/banner.gif
