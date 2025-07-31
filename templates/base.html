@@ -4,18 +4,46 @@
     <meta charset="UTF-8">
     <title>{% block title %}PartyBin{% endblock %}</title>
     <link rel="stylesheet" href="/static/style.css">
+    {% if theme %}
+        <link rel="stylesheet" href="/static/themes/{{ theme }}.css">
+    {% else %}
+        <link rel="stylesheet" href="/static/themes/light.css">
+    {% endif %}
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     {% block head %}{% endblock %}
 </head>
 <body>
     <div id="theme-switcher">
-        <button data-theme="light">Claro</button>
-        <button data-theme="dark">Oscuro</button>
-        <button data-theme="hacker">Hacker</button>
+        <a href="{{ url_for('set_theme', theme='light') }}"><button data-theme="light">Claro</button></a>
+        <a href="{{ url_for('set_theme', theme='dark') }}"><button data-theme="dark">Oscuro</button></a>
+        <a href="{{ url_for('set_theme', theme='hacker') }}"><button data-theme="hacker">Hacker</button></a>
     </div>
     <div class="container">
         {% block content %}{% endblock %}
     </div>
-    <script src="/static/js/utils.js"></script>
-    {% block scripts %}{% endblock %}
+            <script src="/static/js/utils.js"></script>
+            <!-- SweetAlert2 JS -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            {% set flash_messages = get_flashed_messages(with_categories=true) %}
+            <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var messages = {{ flash_messages|tojson }};
+                if (messages && messages.length > 0) {
+                    messages.forEach(function(msg) {
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: msg[0] === 'success' ? 'success' : (msg[0] === 'error' ? 'error' : 'info'),
+                            title: msg[1],
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                    });
+                }
+            });
+            </script>
+            {% block scripts %}{% endblock %}
 </body>
 </html>

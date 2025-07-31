@@ -2,32 +2,93 @@
 {% block title %}Crear Paste | PartyBin{% endblock %}
 {% block content %}
 <h2>Crear nuevo Paste</h2>
-<form method="POST" enctype="multipart/form-data">
+<div class="tabs" style="margin-bottom:20px;">
+  <button class="tab-btn" data-tab="editor">Editor</button>
+  <button class="tab-btn" data-tab="preview">Previsualización</button>
+  <button class="tab-btn" data-tab="info">Info</button>
+</div>
+<div id="tab-editor" class="tab-content">
+  <form method="POST" action="{{ url_for('create_paste') }}" enctype="multipart/form-data">
     <label>Título (opcional): <input type="text" name="title"></label><br>
     <label>Contenido:<br>
-        <textarea name="content" rows="15" cols="80"></textarea>
+      <textarea name="content" rows="15" cols="80"></textarea>
     </label><br>
     <label>Formato:
-        <select name="format">
-            <option value="markdown">Markdown</option>
-            <option value="plaintext">Texto plano</option>
-            <option value="html">HTML</option>
-            <option value="code">Código</option>
-        </select>
+      <select name="format">
+        <option value="markdown">Markdown</option>
+        <option value="plaintext">Texto plano</option>
+        <option value="html">HTML</option>
+        <option value="code">Código</option>
+      </select>
     </label><br>
     <label>URL personalizada (opcional): <input type="text" name="custom_url"></label><br>
     <label>Contraseña (opcional): <input type="password" name="password"></label><br>
     <label>Firma/Alias (opcional): <input type="text" name="author"></label><br>
     <label>Tags (separados por coma): <input type="text" name="tags"></label><br>
     <label>Autodestrucción:
-        <select name="autodestruct">
-            <option value="none">Ninguna</option>
-            <option value="time">Por tiempo</option>
-            <option value="views">Por vistas</option>
-            <option value="one">Primer acceso</option>
-        </select>
-        <input type="text" name="autodestruct_value" placeholder="Valor (minutos, vistas, etc)">
+      <select name="autodestruct">
+        <option value="none">Ninguna</option>
+        <option value="time">Por tiempo</option>
+        <option value="views">Por vistas</option>
+        <option value="one">Primer acceso</option>
+      </select>
+      <input type="text" name="autodestruct_value" placeholder="Valor (minutos, vistas, etc)">
     </label><br>
+    <label><input type="checkbox" name="privado"> Privado (solo accesible con contraseña)</label><br>
     <button type="submit">Crear Paste</button>
-</form>
+  </form>
+</div>
+<div id="tab-preview" class="tab-content" style="display:none;">
+  <h3>Previsualización</h3>
+  <div id="preview-content" style="background:#232323;padding:16px;border-radius:6px;"></div>
+</div>
+<div id="tab-info" class="tab-content" style="display:none;">
+  <h3>Información</h3>
+  <ul>
+    <li>Permite crear pastes en Markdown, texto plano, HTML o código.</li>
+    <li>Protección opcional por contraseña y modo privado.</li>
+    <li>Autodestrucción configurable.</li>
+    <li>Exportación, QR, dashboard y más.</li>
+  </ul>
+</div>
+<script>
+// Tabs
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabContents.forEach(tc => tc.style.display = 'none');
+    document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+// Preview
+const textarea = document.querySelector('textarea[name="content"]');
+const previewDiv = document.getElementById('preview-content');
+const formatSelect = document.querySelector('select[name="format"]');
+function renderPreview() {
+  let content = textarea.value;
+  let format = formatSelect.value;
+  if (format === 'markdown') {
+    if (window.marked) {
+      previewDiv.innerHTML = marked.parse(content);
+    } else {
+      previewDiv.textContent = content;
+    }
+  } else if (format === 'html') {
+    previewDiv.innerHTML = content;
+  } else if (format === 'code') {
+    previewDiv.innerHTML = '<pre>' + content + '</pre>';
+  } else {
+    previewDiv.textContent = content;
+  }
+}
+if (textarea && previewDiv && formatSelect) {
+  textarea.addEventListener('input', renderPreview);
+  formatSelect.addEventListener('change', renderPreview);
+  renderPreview();
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 {% endblock %}

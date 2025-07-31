@@ -9,15 +9,97 @@
     <span>Tags: {{ paste.tags|join(', ') }}</span>
     <span>Autor: {{ paste.author or 'Anónimo' }}</span>
 </div>
-<div class="paste-content">
-    {{ paste.rendered_content|safe }}
+<div class="tabs" style="margin-bottom:20px;">
+  <button class="tab-btn" data-tab="view">Visualización</button>
+  <button class="tab-btn" data-tab="raw">Raw</button>
+  <button class="tab-btn" data-tab="info">Info</button>
+</div>
+<div id="tab-view" class="tab-content">
+  <div class="paste-content">
+    {% if privado %}
+      <div class="private-warning">Este paste es privado. Ingresa la contraseña para ver el contenido.</div>
+    {% else %}
+      {{ paste.rendered_content|safe }}
+    {% endif %}
+  </div>
+</div>
+<div id="tab-raw" class="tab-content" style="display:none;">
+  <h3>Raw</h3>
+  <pre style="background:#232323;padding:16px;border-radius:6px;">{{ paste.content }}</pre>
+</div>
+<div id="tab-info" class="tab-content" style="display:none;">
+  <h3>Información</h3>
+  <ul>
+    <li>Formato: {{ paste.format }}</li>
+    <li>Protegido: {% if paste.password %}Sí{% else %}No{% endif %}</li>
+    <li>Privado: {% if paste.privado %}Sí{% else %}No{% endif %}</li>
+    <li>Autodestrucción: {{ paste.autodestruct }}</li>
+    <li>Tags: {{ paste.tags|join(', ') }}</li>
+  </ul>
 </div>
 <div class="actions">
-    <a href="/raw/{{ paste.url }}">Raw</a>
-    <a href="/export/{{ paste.url }}?type=txt">Descargar TXT</a>
-    <a href="/export/{{ paste.url }}?type=md">Descargar MD</a>
-    <a href="/export/{{ paste.url }}?type=html">Descargar HTML</a>
-    <a href="/qr/{{ paste.url }}">QR</a>
-    <a href="/edit/{{ paste.url }}">Editar</a>
+    <button class="action-btn" data-action="raw" data-url="/raw/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>Raw</button>
+    <button class="action-btn" data-action="export-txt" data-url="/export/{{ paste.url }}?type=txt" {% if privado %}data-privado="1"{% endif %}>Descargar TXT</button>
+    <button class="action-btn" data-action="export-md" data-url="/export/{{ paste.url }}?type=md" {% if privado %}data-privado="1"{% endif %}>Descargar MD</button>
+    <button class="action-btn" data-action="export-html" data-url="/export/{{ paste.url }}?type=html" {% if privado %}data-privado="1"{% endif %}>Descargar HTML</button>
+    <button class="action-btn" data-action="qr" data-url="/qr/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>QR</button>
+    <button class="action-btn" data-action="edit" data-url="/edit/{{ paste.url }}" {% if privado %}data-privado="1"{% endif %}>Editar</button>
 </div>
+{% block scripts %}
+<script>
+// Tabs
+const tabBtns = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabContents.forEach(tc => tc.style.display = 'none');
+    document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+    tabBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+document.querySelectorAll('.action-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var url = btn.getAttribute('data-url');
+        var privado = btn.getAttribute('data-privado');
+        if (privado) {
+            Swal.fire({
+                title: 'Protegido',
+                text: 'Este paste está protegido. Introduce la contraseña:',
+                input: 'password',
+                inputPlaceholder: 'Contraseña',
+                showCancelButton: true,
+                confirmButtonText: 'Continuar',
+                cancelButtonText: 'Cancelar',
+                inputAttributes: {
+                  autocapitalize: 'off',
+                  autocomplete: 'off'
+                }
+            }).then(function(result) {
+                if (result.isConfirmed && result.value) {
+                    // Crear y enviar formulario POST con contraseña
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = url;
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'password';
+                    input.value = result.value;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        } else {
+            if(btn.getAttribute('data-action') === 'edit') {
+                window.location.href = url;
+            } else {
+                window.location.href = url;
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}
