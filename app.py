@@ -58,9 +58,36 @@ def index():
 @app.route('/create', methods=['GET', 'POST'])
 def create_paste():
 	if request.method == 'POST':
-		# Aquí irá la lógica para crear el paste
-		flash('Paste creado (demo)', 'success')
-		return redirect(url_for('index'))
+		from models import Paste
+		content = request.form.get('content', '').strip()
+		format = request.form.get('format', 'markdown')
+		title = request.form.get('title', '').strip()
+		custom_url = request.form.get('custom_url', '').strip()
+		password = request.form.get('password', '').strip() or None
+		author = request.form.get('author', '').strip() or None
+		tags = [t.strip() for t in request.form.get('tags', '').split(',') if t.strip()]
+		autodestruct = request.form.get('autodestruct', 'none')
+		autodestruct_value = request.form.get('autodestruct_value', '').strip() or None
+
+		# Validación mínima
+		if not content:
+			flash('El contenido no puede estar vacío.', 'danger')
+			return render_template('create.html')
+
+		paste = Paste(
+			content=content,
+			format=format,
+			title=title or None,
+			url=custom_url or None,
+			password=password,
+			author=author,
+			tags=tags,
+			autodestruct=autodestruct if autodestruct != 'none' else None,
+			autodestruct_value=autodestruct_value,
+		)
+		paste.save()
+		flash('Paste creado correctamente.', 'success')
+		return redirect(url_for('view_paste', paste_url=paste.url))
 	return render_template('create.html')
 
 @app.route('/view/<string:paste_url>')
